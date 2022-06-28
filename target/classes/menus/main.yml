@@ -1,0 +1,42 @@
+Inventory:
+  title: "Bosses"
+  size: 45
+  items:
+    1:
+      type: SKULL_ITEM
+      owner: "{player}"
+      name: "&6{player}"
+      lore:
+        - '&7Abaixo estão suas informações:'
+        - ''
+        - ' &8▶ &7Peles de Boss: &f{boss_points} &4&l☬'
+        - ' &8▶ &7Bosses Mortos: &f{killed_bosses}'
+      slot: 13
+    2:
+      action: SHOP
+      type: SKULL_ITEM
+      owner: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDRkYjI0YTAwYWZkMTFjNTQyYjVmZWVlMDBjN2I0MTZkNzhhNjhiNmYwMzY3YTllMTAyNWYwYTJmY2FkMTNhNiJ9fX0=
+      name: '&6Loja'
+      lore:
+        - '&7Clique para acessar'
+        - '&7a loja de bosses!'
+      slot: 31
+    3:
+      action: TOP
+      type: SKULL_ITEM
+      owner: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjRhZjhkNTc1ZjBhNTI0ZWY2NmEyMTU3M2U4YTRhOGFjN2Q2NDBiMDBkOThlMmU5Mzc0ZTYwNDcwZTdjODZmMCJ9fX0=
+      name: '&6Top Bosses'
+      lore:
+        - '&7Clique para ver os'
+        - '&7jogadores que mais'
+        - '&7mataram bosses!'
+      slot: 33
+    4:
+      slot: 29
+      action: 'PLAYER:warp bosses'
+      type: SKULL_ITEM
+      owner: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTgzNzgwM2Q0NDlkOWE3NDE3MDIzNWNkMDQxNzUyOTZkM2Q2YjdhNjkxZThkODhkZGM4MTc5MGNiOTk2NGYwZCJ9fX0=
+      name: '&6Arena de Bosses'
+      lore:
+        - '&7Clique para ir até'
+        - '&7a Arena de bosses!'

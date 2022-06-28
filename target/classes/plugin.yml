@@ -1,0 +1,7 @@
+name: Bosses
+description: ${project.description}
+version: 1.0
+api-version: 1.8
+author: zPedroo_
+main: com.zpedroo.bosses.VoltzBosses
+softdepend: [PlaceholderAPI, WGRegionEvents]

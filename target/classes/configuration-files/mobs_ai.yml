@@ -1,0 +1,60 @@
+Mobs:
+  Witch:
+    attack-delay: 8 # delay entre um ataque e outro (segundos)
+    speed: 0.25
+    heal:
+      min: 1
+      max: 50
+    black-magic-attack:
+      effect-duration: 4 # segundos
+    fire-attack:
+      effect-duration: 5
+    fire-circle-attack:
+      radius: 4
+    poison-attack:
+      effect-duration: 4
+    slowness-attack:
+      effect-duration: 4
+    minion:
+      type: ENDERMITE
+      speed: 0.25
+      damage: 5
+  Guardian:
+    attack-delay: 2
+    speed: 5
+    move-speed: 0.07
+    nailing-attack:
+      effect-duration: 4
+  Zombie:
+    attack-delay: 4
+    speed: 0.35
+    move-speed: 1.2
+    normal-attack:
+      damage: 15
+    blood-rush-attack:
+      damage: 35
+    minion:
+      speed: 0.25
+      damage: 5
+  Skeleton:
+    attack-delay: 1
+    speed: 0.25
+    arrow-amount: 5
+    normal-arrow:
+      damage: 15
+    poisoned-arrow:
+      damage: 13
+      effect-duration: 5
+    slowness-arrow:
+      damage: 13
+      effect-duration: 5
+  Blaze:
+    attack-delay: 3
+    speed: 5
+    move-speed: 1.5
+    normal-attack:
+      damage: 20
+    fire-attack:
+      duration: 10
+    smoke-attack:
+      effect-duration: 2

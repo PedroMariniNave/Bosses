@@ -1,0 +1,204 @@
+MySQL:
+  enabled: false
+  host: 'localhost'
+  database: 'db'
+  username: 'user'
+  password: 'pass'
+  port: 3306
+
+Settings:
+  command: boss
+  aliases: [bosses]
+  null-damager: 'Ninguém'
+  save-interval: 600 # em segundos
+  find-target-interval: 5 # em segundos
+  target-radius: 10
+  boss-spawn-timer: 600 # em segundos
+  boss-spawner-hologram:
+    - '&6&lSPAWNER DE BOSSES'
+    - ''
+    - '&7Um novo boss irá spawnar em:'
+    - '{timer}'
+  boss-regions:
+    - 'bosses'
+
+Messages:
+  no-boss: '&c-/-'
+  invalid-amount: '&6&lVoltz&f&lMC &8&l➜ &cA quantia informada é inválida!'
+  insufficient-points: '&6&lVoltz&f&lMC &8&l➜ &cVocê não possui Restos de Boss suficientes! ({has}/{need})'
+  need-space: '&6&lVoltz&f&lMC &8&l➜ &cVocê não possui espaço suficiente no seu inventário! ({has}/{need})'
+  pvp-area: '&6&lVoltz&f&lMC &8&l➜ &cVocê não pode ativar esse item em uma área de PvP!'
+  choose-amount:
+    - ''
+    - '&6&lVoltz&f&lMC &8&l➜ &7Digite no chat quantos itens deseja comprar!'
+    - ''
+    - ' &8▶ &7Comprando: &f{item}'
+    - ' &8▶ &7Preço: &f{price} &4☬'
+    - ''
+  successful-purchased:
+    - ''
+    - '&6&lVoltz&f&lMC &8&l➜ &7Compra efetuada com sucesso!'
+    - ''
+    - ' &8▶ &7Item adquirido: &f{item}'
+    - ' &8▶ &7Quantia: &fx{amount}'
+    - ' &8▶ &7Preço: &f{price} &4☬'
+    - ''
+
+Next-Page:
+  type: ARROW
+  name: '&aPróxima Página'
+
+Previous-Page:
+  type: ARROW
+  name: '&cPágina Anterior'
+
+Titles:
+  item-activated:
+    title: ''
+    subtitle: '&4+{amount} ☬'
+
+Bosses:
+  1:
+    entity-type: ZOMBIE
+    boss-bar: '&6&lBoss &f{health} &4&l❤'
+    max-health: 500000
+    top-damage:
+      1:
+        display: ' &f{position}º &8- &f{player} &7(&f{damage} &4&l❤&7) &f25 &4☬ &7+ &f1x &4Chave de Bosses'
+        commands:
+          - 'boss give {player} 25'
+          - 'cratesadmin give {player} Bosses 1'
+      2:
+        display: ' &f{position}º &8- &f{player} &7(&f{damage} &4&l❤&7) &f15 &4☬'
+        commands:
+          - 'boss give {player} 15'
+      3:
+        display: ' &f{position}º &8- &f{player} &7(&f{damage} &4&l❤&7) &f5 &4☬'
+        commands:
+          - 'boss give {player} 5'
+    drops:
+      1:
+        chance: 100
+        display-item:
+          type: DIAMOND_SWORD
+          glow: true
+          name: '&5Espada Épica'
+          lore:
+            - '&7Espada dropada por boss!'
+        item-to-give:
+          type: DIAMOND_SWORD
+          glow: true
+          name: '&5Espada Épica'
+          lore:
+            - '&7Espada dropada por boss!'
+      2:
+        chance: 20
+        display-item:
+          type: DIAMOND_AXE
+          glow: true
+          name: '&6Machado Lendário'
+          lore:
+            - '&7Machado dropado por boss!'
+        item-to-give:
+          type: DIAMOND_AXE
+          glow: true
+          name: '&6Machado Lendário'
+          lore:
+            - '&7Machado dropado por boss!'
+        commands:
+          - 'broadcast {player} pegou um Machado Lendário na Warp Bosses!'
+    spawn-message:
+      - ''
+      - '&7Um novo Boss surgiu! Mate-o e ganhe várias recompensas! &8(/bosses)'
+      - ''
+    kill-message:
+      - ''
+      - '&7O Boss &fZumbi &7foi morto&7! &8(/bosses)'
+      - ''
+      - '{damagers}'
+      - ''
+    item-in-hand:
+      type: DIAMOND_SWORD
+      glow: true
+      enchants:
+        - 'DURABILITY,10000'
+    equipments:
+      1:
+        type: DIAMOND_HELMET
+        glow: true
+        enchants:
+          - 'DURABILITY,10000'
+      2:
+        type: DIAMOND_CHESTPLATE
+        glow: true
+        enchants:
+          - 'DURABILITY,10000'
+      3:
+        type: DIAMOND_LEGGINGS
+        glow: true
+        enchants:
+          - 'DURABILITY,10000'
+      4:
+        type: DIAMOND_BOOTS
+        glow: true
+        enchants:
+          - 'DURABILITY,10000'
+
+Spawner-Item:
+  type: SKULL_ITEM
+  owner: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDdjMmJjODExODFiMGE0ZDhkNDdjZmM5MzY2MDlkYTg4NjRjZTQwM2E2NDdjN2E2MDNmODNmNTU3ZjBhMDI2ZCJ9fX0=
+  name: '&6Spawner de Bosses'
+  lore:
+    - '&7Coloque no chão para'
+    - '&7gerar bosses!'
+
+Points-Item:
+  type: SKULL_ITEM
+  owner: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTUyNTU2YzljZmIxNGQ4ZDhkMzQxZGI5NzQ1NTJjMmIzMGFjMDBhMWYzODk1YWQ5ZDNlZTU1NWFmZGVkZTBhNCJ9fX0=
+  name: '&4Restos de Boss &7[&fx{amount}&7]'
+  lore:
+    - '&7Ative esse item para ganhar'
+    - '&7Restos de Boss e gastar na'
+    - '&7loja de Bosses!'
+
+Boss-Killer-Item:
+  type: DIAMOND_SWORD
+  glow: true
+  name: '&7Espada &8- &4Bosses'
+  lore:
+    - '&7Afiação: &f∞'
+    - '&7Inquebrável: &f∞'
+    - '&7Aspecto Flamejante: &f∞'
+    - '&7Dano: &f{damage} &4&l❤'
+
+Boss-Killer-Arrow:
+  type: ARROW
+  glow: true
+  name: '&7Flecha &8- &4Bosses'
+  lore:
+    - '&7Penetração: &f∞'
+    - '&7Dano: &f{damage} &4&l❤'
+
+Time-Formatter:
+  second: '&7segundo&f'
+  seconds: '&7segundos&f'
+  minute: '&7minuto&f'
+  minutes: '&7minutos&f'
+  hour: '&7hora&f'
+  hours: '&7horas&f'
+  day: '&7dia&f'
+  days: '&7dias&f'
+  now: Agora
+
+Number-Formatter:
+  - "k"
+  - "M"
+  - "B"
+  - "T"
+  - "Q"
+  - "QQ"
+  - "S"
+  - "SS"
+  - "O"
+  - "N"
+  - "D"

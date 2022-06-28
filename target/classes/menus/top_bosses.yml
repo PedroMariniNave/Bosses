@@ -1,0 +1,15 @@
+Inventory:
+  title: "Bosses - Top"
+  size: 36
+  slots: 11,12,13,14,15,20,21,22,23,24
+
+Item:
+  type: SKULL_ITEM
+  owner: "{player}"
+  name: "&4{player} &7[&f{pos}º&7]"
+  lore:
+    - '&7Abaixo estão as informações'
+    - '&7do jogador:'
+    - ''
+    - ' &8▶ &7Peles de Boss: &f{boss_points} &4&l☬'
+    - ' &8▶ &7Bosses Mortos: &f{killed_bosses}'
