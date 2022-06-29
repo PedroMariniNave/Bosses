@@ -5,9 +5,11 @@ import com.zpedroo.bosses.mysql.DBConnection;
 import com.zpedroo.bosses.objects.general.PlayerData;
 import com.zpedroo.bosses.objects.spawner.BossSpawner;
 import com.zpedroo.bosses.utils.FileUtils;
+import com.zpedroo.bosses.utils.offlineapi.OfflinePlayerAPI;
 import com.zpedroo.bosses.utils.serialization.LocationSerialization;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -22,7 +24,14 @@ public class DataManager {
         instance = this;
     }
 
-    public PlayerData getPlayerData(Player player) {
+    public PlayerData getPlayerData(@NotNull Player player) {
+        return getPlayerDataByName(player.getName());
+    }
+
+    public PlayerData getPlayerDataByName(String playerName) {
+        Player player = OfflinePlayerAPI.getPlayer(playerName);
+        if (player == null) return null;
+
         PlayerData data = dataCache.getPlayerData().get(player);
         if (data == null) {
             data = DBConnection.getInstance().getDBManager().getPlayerDataFromDatabase(player);

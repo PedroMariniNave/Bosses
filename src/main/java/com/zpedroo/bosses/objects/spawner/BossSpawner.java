@@ -3,12 +3,14 @@ package com.zpedroo.bosses.objects.spawner;
 import com.zpedroo.bosses.VoltzBosses;
 import com.zpedroo.bosses.managers.DataManager;
 import com.zpedroo.bosses.objects.general.Drop;
+import com.zpedroo.bosses.objects.general.PlayerData;
 import com.zpedroo.bosses.objects.general.TopDamageSettings;
 import com.zpedroo.bosses.tasks.BossSpawnerTask;
 import com.zpedroo.bosses.utils.config.Messages;
 import com.zpedroo.bosses.utils.config.Settings;
 import com.zpedroo.bosses.utils.formatter.NumberFormatter;
 import com.zpedroo.bosses.utils.formatter.TimeFormatter;
+import com.zpedroo.bosses.utils.offlineapi.OfflinePlayerAPI;
 import com.zpedroo.bosses.utils.serialization.LocationSerialization;
 import net.minecraft.server.v1_8_R3.EntityWolf;
 import org.apache.commons.lang.StringUtils;
@@ -127,18 +129,22 @@ public class BossSpawner {
             }));
         }
 
-        deliverTopDamagersRewards();
+        giveTopDamagersRewards();
         dropBossItems();
 
         bossEntity.remove();
 
-        /*
-        UUID topOneUniqueId = damagers.isEmpty() ? null : (UUID) damagers.keySet().toArray()[0];
-        if (topOneUniqueId != null) {
-            PlayerData killerData = DataManager.getInstance().getPlayerData(topOneUniqueId);
+        for (int position = 1; position < spawnedBoss.getTopDamagersAmount(); ++position) {
+            if (position > damagers.size()) break;
+
+            UUID uuid = (UUID) damagers.keySet().toArray()[position-1];
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+            Player player = OfflinePlayerAPI.getPlayer(offlinePlayer.getName());
+            if (player == null) continue;
+
+            PlayerData killerData = DataManager.getInstance().getPlayerData(player);
             killerData.addKilledBossesAmount(1);
         }
-         */
     }
 
     public void damageBoss(int damage) {
@@ -194,7 +200,7 @@ public class BossSpawner {
         return builder.toString();
     }
 
-    private void deliverTopDamagersRewards() {
+    private void giveTopDamagersRewards() {
         int topDamagersAmount = spawnedBoss.getTopDamagersAmount();
         List<Map.Entry<UUID, Integer>> topDamagers = getTopDamagers(topDamagersAmount);
 
@@ -221,7 +227,7 @@ public class BossSpawner {
     private void dropBossItems() {
         for (Drop drop : spawnedBoss.getDrops()) {
             double randomNumber = ThreadLocalRandom.current().nextDouble(0, 100);
-            if (drop.getChance() > randomNumber) continue;
+            if (randomNumber > drop.getChance()) continue;
 
             dropBossItem(drop);
         }

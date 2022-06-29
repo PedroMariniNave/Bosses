@@ -1,8 +1,11 @@
 package com.zpedroo.bosses.commands;
 
+import com.zpedroo.bosses.managers.DataManager;
+import com.zpedroo.bosses.objects.general.PlayerData;
 import com.zpedroo.bosses.utils.config.Items;
 import com.zpedroo.bosses.utils.formatter.NumberFormatter;
 import com.zpedroo.bosses.utils.menu.Menus;
+import com.zpedroo.bosses.utils.offlineapi.OfflinePlayerAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,24 +28,18 @@ public class BossesCmd implements CommandExecutor {
             ItemStack item = null;
             switch (args[0].toUpperCase()) {
                 case "SHOP":
-                    if (player == null) break;
-
-                    Menus.getInstance().openShopMenu(player);
+                    if (player != null) Menus.getInstance().openShopMenu(player);
                     return true;
                 case "TOP":
-                    if (player == null) break;
-
-                    Menus.getInstance().openTopMenu(player);
+                    if (player != null) Menus.getInstance().openTopMenu(player);
                     return true;
                 case "SPAWNER":
-                    if (!sender.hasPermission("bosses.admin")) break;
-                    if (player == null) break;
+                    if (player == null || !sender.hasPermission("bosses.admin")) break;
 
                     player.getInventory().addItem(Items.getBossSpawnerItem());
                     return true;
                 case "KILLER":
-                    if (!sender.hasPermission("bosses.admin")) break;
-                    if (args.length < 3) break;
+                    if (!sender.hasPermission("bosses.admin") || args.length < 3) break;
 
                     target = Bukkit.getPlayer(args[1]);
                     if (target == null) break;
@@ -58,8 +55,7 @@ public class BossesCmd implements CommandExecutor {
                     }
                     return true;
                 case "ARROW":
-                    if (!sender.hasPermission("bosses.admin")) break;
-                    if (args.length < 4) break;
+                    if (!sender.hasPermission("bosses.admin") || args.length < 4) break;
 
                     target = Bukkit.getPlayer(args[1]);
                     if (target == null) break;
@@ -79,11 +75,22 @@ public class BossesCmd implements CommandExecutor {
                         target.getWorld().dropItemNaturally(target.getLocation(), item);
                     }
                     return true;
-                case "ITEM":
-                    if (!sender.hasPermission("bosses.admin")) break;
-                    if (args.length < 3) break;
+                case "GIVE":
+                    if (!sender.hasPermission("bosses.admin") || args.length < 3) break;
 
                     target = Bukkit.getPlayer(args[1]);
+                    if (target == null) break;
+
+                    amount = NumberFormatter.getInstance().filter(args[2]);
+                    if (amount.signum() <= 0) break;
+
+                    PlayerData data = DataManager.getInstance().getPlayerData(target);
+                    data.addPoints(amount);
+                    return true;
+                case "ITEM":
+                    if (!sender.hasPermission("bosses.admin") || args.length < 3) break;
+
+                    target = OfflinePlayerAPI.getPlayer(args[1]);
                     if (target == null) break;
 
                     amount = NumberFormatter.getInstance().filter(args[2]);
@@ -99,9 +106,7 @@ public class BossesCmd implements CommandExecutor {
             }
         }
 
-        if (player == null) return true;
-
-        Menus.getInstance().openMainMenu(player);
+        if (player != null) Menus.getInstance().openMainMenu(player);
         return false;
     }
 }
