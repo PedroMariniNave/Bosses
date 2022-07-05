@@ -77,12 +77,13 @@ public class DataCache {
 
             List<String> spawnMessage = Colorize.getColored(FileUtils.get().getStringList(file, "Bosses." + boss + ".spawn-message"));
             List<String> killMessage = Colorize.getColored(FileUtils.get().getStringList(file, "Bosses." + boss + ".kill-message"));
+            List<String> hitCommands = FileUtils.get().getStringList(file, "Bosses." + boss + ".hit-commands");
             List<Drop> drops = getDropsFromFile(file, "Bosses." + boss + ".drops");
             Map<Integer, TopDamageSettings> topDamageSettings = getTopDamageSettingsFromFile(file, "Bosses." + boss + ".top-damage");
 
             int maxHealth = FileUtils.get().getInt(file, "Bosses." + boss + ".max-health");
 
-            ret.add(new Boss(entityType, bossBar, equipments.toArray(new ItemStack[4]), itemInHand, spawnMessage, killMessage, drops, topDamageSettings, maxHealth));
+            ret.add(new Boss(entityType, bossBar, equipments.toArray(new ItemStack[4]), itemInHand, spawnMessage, killMessage, hitCommands, drops, topDamageSettings, maxHealth));
         }
 
         return ret;

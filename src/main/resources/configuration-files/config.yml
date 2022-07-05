@@ -62,6 +62,8 @@ Bosses:
     entity-type: ZOMBIE
     boss-bar: '&6&lBoss &f{health} &4&l❤'
     max-health: 500000
+    hit-commands:
+      - 'level give {player} {damage}'
     top-damage:
       1:
         display: ' &f{position}º &8- &f{player} &7(&f{damage} &4&l❤&7) &f25 &4☬ &7+ &f1x &4Chave de Bosses'

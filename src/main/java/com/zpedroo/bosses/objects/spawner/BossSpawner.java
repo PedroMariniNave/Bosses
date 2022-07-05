@@ -161,6 +161,16 @@ public class BossSpawner {
             int actualDamage = damagers.getOrDefault(damager.getUniqueId(), 0);
             int newPlayerDamage = Math.min(actualDamage + damage, spawnedBoss.getMaxHealth());
             damagers.put(damager.getUniqueId(), newPlayerDamage);
+
+            for (String command : spawnedBoss.getHitCommands()) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), StringUtils.replaceEach(command, new String[]{
+                        "{player}",
+                        "{damage}"
+                }, new String[]{
+                        damager.getName(),
+                        String.valueOf(damage)
+                }));
+            }
         }
 
         bossEntity.setMetadata("BossHealth", new FixedMetadataValue(VoltzBosses.get(), newBossHealth));
@@ -207,9 +217,9 @@ public class BossSpawner {
         for (int position = 1; position <= topDamagersAmount; ++position) {
             TopDamageSettings topDamageSettings = spawnedBoss.getTopDamageSettings().get(position);
             if (topDamageSettings == null) continue;
-            if (position >= topDamagers.size()) break;
+            if (position > topDamagers.size()) break;
 
-            Map.Entry<UUID, Integer> entry = topDamagers.get(position);
+            Map.Entry<UUID, Integer> entry = topDamagers.get(position-1);
             UUID uuid = entry.getKey();
 
             OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);

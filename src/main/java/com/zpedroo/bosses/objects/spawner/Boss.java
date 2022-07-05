@@ -17,6 +17,7 @@ public class Boss {
     private final ItemStack itemInHand;
     private final List<String> spawnMessage;
     private final List<String> killMessage;
+    private final List<String> hitCommands;
     private final List<Drop> drops;
     private final Map<Integer, TopDamageSettings> topDamageSettings;
     private final int maxHealth;
