@@ -9,13 +9,15 @@ public class Messages {
 
     public static final String NO_BOSS = Colorize.getColored(FileUtils.get().getString(FileUtils.Files.CONFIG, "Messages.no-boss"));
 
+    public static final String NEED_BOSS_KILLER_ITEM = Colorize.getColored(FileUtils.get().getString(FileUtils.Files.CONFIG, "Messages.need-boss-killer-item"));
+
+    public static final String COOLDOWN = Colorize.getColored(FileUtils.get().getString(FileUtils.Files.CONFIG, "Messages.cooldown"));
+
     public static final String INVALID_AMOUNT = Colorize.getColored(FileUtils.get().getString(FileUtils.Files.CONFIG, "Messages.invalid-amount"));
 
     public static final String INSUFFICIENT_POINTS = Colorize.getColored(FileUtils.get().getString(FileUtils.Files.CONFIG, "Messages.insufficient-points"));
 
     public static final String NEED_SPACE = Colorize.getColored(FileUtils.get().getString(FileUtils.Files.CONFIG, "Messages.need-space"));
-
-    public static final String PVP_AREA = Colorize.getColored(FileUtils.get().getString(FileUtils.Files.CONFIG, "Messages.pvp-area"));
 
     public static final List<String> CHOOSE_AMOUNT = Colorize.getColored(FileUtils.get().getStringList(FileUtils.Files.CONFIG, "Messages.choose-amount"));
 

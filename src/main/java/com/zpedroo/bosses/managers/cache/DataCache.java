@@ -10,6 +10,7 @@ import com.zpedroo.bosses.utils.color.Colorize;
 import com.zpedroo.bosses.utils.formatter.NumberFormatter;
 import com.zpedroo.bosses.utils.serialization.LocationSerialization;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -19,6 +20,7 @@ import java.math.BigInteger;
 import java.util.*;
 
 @Getter
+@Setter
 public class DataCache {
 
     private final Set<Location> deletedBossSpawners = new HashSet<>(2);
@@ -29,14 +31,6 @@ public class DataCache {
     private final List<ShopItem> shopItems = getShopItemsFromFile();
     private List<PlayerData> topBosses = DBConnection.getInstance().getDBManager().getTopBosses();
     private BossSpawner lastActiveBossSpawner;
-
-    public void setTopBosses(List<PlayerData> topBosses) {
-        this.topBosses = topBosses;
-    }
-
-    public void setLastActiveBossSpawner(BossSpawner lastActiveBossSpawner) {
-        this.lastActiveBossSpawner = lastActiveBossSpawner;
-    }
 
     private Map<Location, BossSpawner> getBossSpawnersFromFile() {
         FileUtils.Files file = FileUtils.Files.LOCATIONS;

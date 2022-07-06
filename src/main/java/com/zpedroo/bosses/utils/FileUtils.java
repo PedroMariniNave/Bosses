@@ -111,7 +111,8 @@ public class FileUtils {
         LOCATIONS("locations", "configuration-files", ""),
         MAIN("main", "menus", "menus"),
         SHOP("shop", "menus", "menus"),
-        TOP_BOSSES("top_bosses", "menus", "menus");
+        TOP_BOSSES("top_bosses", "menus", "menus"),
+        UPGRADE("upgrade", "menus", "menus");
 
         private final String name;
         private final String resource;

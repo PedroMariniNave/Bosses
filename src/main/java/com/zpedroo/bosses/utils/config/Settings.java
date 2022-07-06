@@ -21,6 +21,8 @@ public class Settings {
 
     public static final int TARGET_RADIUS = FileUtils.get().getInt(FileUtils.Files.CONFIG, "Settings.target-radius");
 
+    public static final int BOSS_KILLER_PICKUP_COOLDOWN = FileUtils.get().getInt(FileUtils.Files.CONFIG, "Settings.boss-killer-pickup-cooldown");
+
     public static final long BOSS_SPAWN_TIMER = FileUtils.get().getLong(FileUtils.Files.CONFIG, "Settings.boss-spawn-timer");
 
     public static final String[] BOSS_SPAWNER_HOLOGRAM = Colorize.getColored(FileUtils.get().getStringList(FileUtils.Files.CONFIG, "Settings.boss-spawner-hologram"))

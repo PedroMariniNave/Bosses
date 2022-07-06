@@ -44,7 +44,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
                 BossSpawner bossSpawner = DataManager.getInstance().getLastActiveBossSpawner();
                 if (bossSpawner == null) return "-/-";
 
-                return bossSpawner.getBossHealth() <= 0 ? "-/-" : NumberFormatter.getInstance().formatDecimal(bossSpawner.getBossHealth());
+                return bossSpawner.getBossHealth() <= 0 ? "-/-" : NumberFormatter.getInstance().formatThousand(bossSpawner.getBossHealth());
             default:
                 return null;
         }

@@ -262,7 +262,7 @@ public class BossSpawner {
             return StringUtils.replaceEach(spawnedBoss.getBossBarDisplay(), new String[]{
                     "{health}"
             }, new String[]{
-                    NumberFormatter.getInstance().formatDecimal(getBossHealth())
+                    NumberFormatter.getInstance().formatThousand(getBossHealth())
             });
         }
 

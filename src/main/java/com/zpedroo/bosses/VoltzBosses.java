@@ -1,11 +1,9 @@
 package com.zpedroo.bosses;
 
+import com.zpedroo.bosses.commands.BossKillerCmd;
 import com.zpedroo.bosses.commands.BossesCmd;
 import com.zpedroo.bosses.hooks.PlaceholderAPIHook;
-import com.zpedroo.bosses.listeners.BossGeneralListeners;
-import com.zpedroo.bosses.listeners.DropListeners;
-import com.zpedroo.bosses.listeners.PlayerChatListener;
-import com.zpedroo.bosses.listeners.PlayerGeneralListeners;
+import com.zpedroo.bosses.listeners.*;
 import com.zpedroo.bosses.managers.BossSpawnerManager;
 import com.zpedroo.bosses.managers.DataManager;
 import com.zpedroo.bosses.mobai.listeners.EntityDamageListener;
@@ -17,6 +15,7 @@ import com.zpedroo.bosses.tasks.FindTargetTask;
 import com.zpedroo.bosses.tasks.SaveTask;
 import com.zpedroo.bosses.tasks.UpdateHealthTask;
 import com.zpedroo.bosses.utils.FileUtils;
+import com.zpedroo.bosses.utils.cooldown.Cooldown;
 import com.zpedroo.bosses.utils.formatter.NumberFormatter;
 import com.zpedroo.bosses.utils.menu.Menus;
 import org.bukkit.Bukkit;
@@ -29,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -54,6 +54,7 @@ public class VoltzBosses extends JavaPlugin {
         new DataManager();
         new BossSpawnerManager();
         new Menus();
+        new Cooldown();
         new FindTargetTask(this);
         new SaveTask(this);
         new UpdateHealthTask(this);
@@ -61,6 +62,7 @@ public class VoltzBosses extends JavaPlugin {
         registerHooks();
         registerListeners();
         registerCommand(COMMAND, ALIASES, new BossesCmd());
+        registerCommand("matadora", Arrays.asList("matadoradeboss"), new BossKillerCmd());
     }
 
     public void onDisable() {
@@ -87,6 +89,7 @@ public class VoltzBosses extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DropListeners(), this);
         getServer().getPluginManager().registerEvents(new PlayerChatListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerGeneralListeners(), this);
+        getServer().getPluginManager().registerEvents(new RegionListeners(), this);
 
         getServer().getPluginManager().registerEvents(new EntityDamageListener(), this);
         getServer().getPluginManager().registerEvents(new EntityShootBowListener(), this);

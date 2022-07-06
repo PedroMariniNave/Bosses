@@ -1,5 +1,6 @@
 package com.zpedroo.bosses.objects.general;
 
+import com.zpedroo.bosses.managers.DataManager;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
@@ -34,6 +35,7 @@ public class BossBar {
         wither.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(0);
         wither.setHealth(percentage * 3); // x3 because wither max health is 300
         wither.setInvisible(true);
+        wither.setSize(0, 0);
 
         Entity nmsEntity = wither;
         NBTTagCompound tag = nmsEntity.getNBTTag();
@@ -60,5 +62,9 @@ public class BossBar {
 
         PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(wither.getId());
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    public void cache() {
+        DataManager.getInstance().getCache().getBossBars().put(player, this);
     }
 }

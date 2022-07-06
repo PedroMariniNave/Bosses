@@ -2,6 +2,9 @@ package com.zpedroo.bosses.listeners;
 
 import com.zpedroo.bosses.managers.DataManager;
 import com.zpedroo.bosses.objects.spawner.BossSpawner;
+import com.zpedroo.bosses.utils.bosskiller.BossKillerEnchant;
+import com.zpedroo.bosses.utils.bosskiller.BossKillerUtils;
+import com.zpedroo.bosses.utils.config.Messages;
 import com.zpedroo.bosses.utils.serialization.LocationSerialization;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Location;
@@ -25,38 +28,29 @@ public class BossGeneralListeners implements Listener {
 
         event.setCancelled(true);
 
+        if (!(event.getDamager() instanceof Player)) return;
+
         Location bossSpawnerLocation = LocationSerialization.deserialize(event.getEntity().getMetadata("Boss").get(0).asString());
         if (bossSpawnerLocation == null) return;
 
         BossSpawner bossSpawner = DataManager.getInstance().getBossSpawner(bossSpawnerLocation);
         if (bossSpawner == null) return;
 
-        Player player = null;
-        double damage = event.getDamage();
-
-        if (event.getDamager() instanceof Arrow) {
-            Arrow arrow = (Arrow) event.getDamager();
-            if (!(arrow.getShooter() instanceof Player)) return;
-
-            player = (Player) arrow.getShooter();
-            if (arrow.hasMetadata("BossKillerArrowDamage")) damage = arrow.getMetadata("BossKillerArrowDamage").get(0).asDouble();
-
-            arrow.remove();
-        } else if (event.getDamager() instanceof Player) {
-            player = (Player) event.getDamager();
-            if (player.getItemInHand() == null || player.getItemInHand().getType().equals(Material.AIR)) return;
-
-            ItemStack item = player.getItemInHand().clone();
-//            if (item.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) > 0) return;
-
-            NBTItem nbt = new NBTItem(item);
-            if (nbt.hasKey("BossKillerDamage")) damage = nbt.getDouble("BossKillerDamage");
+        Player player = (Player) event.getDamager();
+        ItemStack item = player.getItemInHand();
+        if (!BossKillerUtils.isBossKiller(item)) {
+            player.sendMessage(Messages.NEED_BOSS_KILLER_ITEM);
+            return;
         }
 
-        Entity entity = bossSpawner.getBossEntity();
-        entity.getWorld().playSound(entity.getLocation(), Sound.ANVIL_BREAK, 0.2f, 10f);
-        bossSpawner.damageBoss(player, (int) damage);
+        int damage = (int) BossKillerUtils.getEnchantEffect(item, BossKillerEnchant.DAMAGE.get());
+        if (damage <= 0) return;
+
+        bossSpawner.damageBoss(player, damage);
         bossSpawner.updateTarget();
+
+        Entity entity = bossSpawner.getBossEntity();
+        entity.getWorld().playSound(entity.getLocation(), Sound.ANVIL_BREAK, 10f, 10f);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -65,23 +59,7 @@ public class BossGeneralListeners implements Listener {
 
         double damage = event.getDamage();
 
-        if (event.getDamager() instanceof Arrow) {
-            Arrow arrow = (Arrow) event.getDamager();
-            if (!(arrow.getShooter() instanceof Player)) return;
-
-            if (arrow.hasMetadata("BossKillerArrowDamage")) damage = arrow.getMetadata("BossKillerArrowDamage").get(0).asDouble();
-
-            arrow.remove();
-        } else if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
-            if (player.getItemInHand() == null || player.getItemInHand().getType().equals(Material.AIR)) return;
-
-            ItemStack item = player.getItemInHand().clone();
-//            if (item.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) > 0) return;
-
-            NBTItem nbt = new NBTItem(item);
-            if (nbt.hasKey("BossKillerDamage")) damage = nbt.getDouble("BossKillerDamage");
-        }
+        // todo changes
 
         LivingEntity entity = (LivingEntity) event.getEntity();
         if (entity.getHealth() - damage <= 0) {

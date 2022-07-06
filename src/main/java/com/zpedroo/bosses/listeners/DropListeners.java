@@ -27,6 +27,11 @@ public class DropListeners implements Listener {
 
         item.remove();
 
+        handleDropRewards(player, drop);
+        player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1f, 1f);
+    }
+
+    private void handleDropRewards(Player player, Drop drop) {
         ItemStack itemToGive = drop.getItemToGive();
         if (itemToGive != null) {
             player.getInventory().addItem(itemToGive);
@@ -39,7 +44,5 @@ public class DropListeners implements Listener {
                     player.getName()
             }));
         }
-
-        player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1f, 1f);
     }
 }

@@ -31,5 +31,4 @@ public class BossSpawnerTask extends BukkitRunnable {
     private void startTask() {
         this.runTaskTimer(VoltzBosses.get(), 0L, BOSS_SPAWN_TIMER * 20L);
     }
-
 }

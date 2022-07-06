@@ -2,20 +2,26 @@ package com.zpedroo.bosses.utils.menu;
 
 import com.zpedroo.bosses.listeners.PlayerChatListener;
 import com.zpedroo.bosses.managers.DataManager;
+import com.zpedroo.bosses.objects.general.EnchantProperties;
 import com.zpedroo.bosses.objects.general.PlayerData;
 import com.zpedroo.bosses.objects.general.ShopItem;
 import com.zpedroo.bosses.utils.FileUtils;
+import com.zpedroo.bosses.utils.bosskiller.BossKillerEnchant;
+import com.zpedroo.bosses.utils.bosskiller.BossKillerUtils;
 import com.zpedroo.bosses.utils.builder.InventoryBuilder;
 import com.zpedroo.bosses.utils.builder.InventoryUtils;
 import com.zpedroo.bosses.utils.builder.ItemBuilder;
+import com.zpedroo.bosses.utils.color.Colorize;
 import com.zpedroo.bosses.utils.config.Messages;
 import com.zpedroo.bosses.utils.formatter.NumberFormatter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class Menus extends InventoryUtils {
@@ -33,7 +39,7 @@ public class Menus extends InventoryUtils {
     public void openMainMenu(Player player) {
         FileUtils.Files file = FileUtils.Files.MAIN;
 
-        String title = ChatColor.translateAlternateColorCodes('&', FileUtils.get().getString(file, "Inventory.title"));
+        String title = Colorize.getColored(FileUtils.get().getString(file, "Inventory.title"));
         int size = FileUtils.get().getInt(file, "Inventory.size");
 
         InventoryBuilder inventory = new InventoryBuilder(title, size);
@@ -91,7 +97,7 @@ public class Menus extends InventoryUtils {
     public void openShopMenu(Player player) {
         FileUtils.Files file = FileUtils.Files.SHOP;
 
-        String title = ChatColor.translateAlternateColorCodes('&', FileUtils.get().getString(file, "Inventory.title"));
+        String title = Colorize.getColored(FileUtils.get().getString(file, "Inventory.title"));
         int size = FileUtils.get().getInt(file, "Inventory.size");
 
         int nextPageSlot = FileUtils.get().getInt(file, "Inventory.next-page-slot");
@@ -132,7 +138,7 @@ public class Menus extends InventoryUtils {
     public void openTopMenu(Player player) {
         FileUtils.Files file = FileUtils.Files.TOP_BOSSES;
 
-        String title = ChatColor.translateAlternateColorCodes('&', FileUtils.get().getString(file, "Inventory.title"));
+        String title = Colorize.getColored(FileUtils.get().getString(file, "Inventory.title"));
         int size = FileUtils.get().getInt(file, "Inventory.size");
 
         InventoryBuilder inventory = new InventoryBuilder(title, size);
@@ -159,5 +165,51 @@ public class Menus extends InventoryUtils {
         }
 
         inventory.open(player);
+    }
+
+    public void openUpgradeMenu(Player player, ItemStack itemToUpgrade) {
+        FileUtils.Files file = FileUtils.Files.UPGRADE;
+        FileConfiguration fileConfiguration = FileUtils.get().getFile(file).get();
+
+        String title = Colorize.getColored(FileUtils.get().getString(file, "Inventory.title"));
+        int size = FileUtils.get().getInt(file, "Inventory.size");
+
+        InventoryBuilder inventory = new InventoryBuilder(title, size);
+
+        for (String str : FileUtils.get().getSection(file, "Inventory.items")) {
+            String enchantmentName = FileUtils.get().getString(file, "Inventory.items." + str + ".enchant");
+            BossKillerEnchant bossKillerEnchant = BossKillerEnchant.getByName(enchantmentName);
+            EnchantProperties enchant = bossKillerEnchant == null ? null : bossKillerEnchant.get();
+            ItemStack item = null;
+            String toGet = getItemStatus(itemToUpgrade, enchant);
+            if (fileConfiguration.contains("Inventory.items." + str + "." + toGet)) {
+                String[] placeholders = BossKillerUtils.getPlaceholders();
+                String[] replacers = BossKillerUtils.getReplacers(itemToUpgrade);
+
+                item = ItemBuilder.build(FileUtils.get().getFile(file).get(), "Inventory.items." + str + "." + toGet, placeholders, replacers).build();
+            } else {
+                item = ItemBuilder.build(FileUtils.get().getFile(file).get(), "Inventory.items." + str).build();
+            }
+
+            int slot = FileUtils.get().getInt(file, "Inventory.items." + str + ".slot");
+
+            inventory.addItem(item, slot, () -> {
+                if (enchant == null) return;
+                if (BossKillerUtils.canUpgrade(itemToUpgrade, enchant)) return;
+
+
+            }, ActionType.ALL_CLICKS);
+        }
+
+        inventory.open(player);
+    }
+
+    private String getItemStatus(@NotNull ItemStack item, @Nullable EnchantProperties enchant) {
+        if (enchant == null) return "undefined";
+        if (!BossKillerUtils.canUpgrade(item, enchant)) {
+            return "locked";
+        }
+
+        return "can-upgrade";
     }
 }

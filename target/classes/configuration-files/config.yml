@@ -14,6 +14,7 @@ Settings:
   find-target-interval: 5 # em segundos
   target-radius: 10
   boss-spawn-timer: 600 # em segundos
+  boss-killer-pickup-cooldown: 5 # segundos
   boss-spawner-hologram:
     - '&6&lSPAWNER DE BOSSES'
     - ''
@@ -24,10 +25,11 @@ Settings:
 
 Messages:
   no-boss: '&c-/-'
+  need-boss-killer-item: '&6&lVoltz&f&lMC &8&l➜ &cVocê precisa usar uma Matadora de Bosses!'
+  cooldown: '&6&lVoltz&f&lMC &8&l➜ &cAguarde {cooldown} segundos antes de pegar outra Matadora de Bosses!'
   invalid-amount: '&6&lVoltz&f&lMC &8&l➜ &cA quantia informada é inválida!'
   insufficient-points: '&6&lVoltz&f&lMC &8&l➜ &cVocê não possui Restos de Boss suficientes! ({has}/{need})'
   need-space: '&6&lVoltz&f&lMC &8&l➜ &cVocê não possui espaço suficiente no seu inventário! ({has}/{need})'
-  pvp-area: '&6&lVoltz&f&lMC &8&l➜ &cVocê não pode ativar esse item em uma área de PvP!'
   choose-amount:
     - ''
     - '&6&lVoltz&f&lMC &8&l➜ &7Digite no chat quantos itens deseja comprar!'
@@ -51,11 +53,6 @@ Next-Page:
 Previous-Page:
   type: ARROW
   name: '&cPágina Anterior'
-
-Titles:
-  item-activated:
-    title: ''
-    subtitle: '&4+{amount} ☬'
 
 Bosses:
   1:
@@ -146,6 +143,36 @@ Bosses:
         enchants:
           - 'DURABILITY,10000'
 
+Enchants:
+  damage:
+    level:
+      initial: 1
+      max: 1000
+      requirement-per-upgrade: 5
+    cost-per-level: 100
+    effect-per-level: 25
+  crit_damage:
+    level:
+      initial: 0
+      max: 10
+      requirement-per-upgrade: 5
+    cost-per-level: 175
+    effect-per-level: 3
+  area_damage:
+    level:
+      initial: 0
+      max: 10
+      requirement-per-upgrade: 5
+    cost-per-level: 250
+    effect-per-level: 2
+  durability:
+    level:
+      initial: 0
+      max: 10
+      requirement-per-upgrade: 5
+    cost-per-level: 75
+    effect-per-level: 5
+
 Spawner-Item:
   type: SKULL_ITEM
   owner: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDdjMmJjODExODFiMGE0ZDhkNDdjZmM5MzY2MDlkYTg4NjRjZTQwM2E2NDdjN2E2MDNmODNmNTU3ZjBhMDI2ZCJ9fX0=
@@ -164,22 +191,30 @@ Points-Item:
     - '&7loja de Bosses!'
 
 Boss-Killer-Item:
-  type: DIAMOND_SWORD
+  type: GOLD_SWORD
   glow: true
-  name: '&7Espada &8- &4Bosses'
+  hide-attributes: true
+  name: '&6Matadora de Bosses'
   lore:
-    - '&7Afiação: &f∞'
-    - '&7Inquebrável: &f∞'
-    - '&7Aspecto Flamejante: &f∞'
-    - '&7Dano: &f{damage} &4&l❤'
+    - '&7Dano: &f{damage_effect} &4&l❤'
+    - '&7Dano em Área: &f{area_damage}'
+    - '&7Crítico: &f{crit_damage}'
+    - '&7Inquebrável: &f{durability}'
+    - ''
+    - ' &8► &fNível: &7{level} {progress}'
+    - ' &8► &fRestos de Boss: &7{points} &4☬'
+    - ''
+    - '&8Esse item não pode ser reparado!'
 
-Boss-Killer-Arrow:
-  type: ARROW
-  glow: true
-  name: '&7Flecha &8- &4Bosses'
-  lore:
-    - '&7Penetração: &f∞'
-    - '&7Dano: &f{damage} &4&l❤'
+Progress:
+  display-amount: 10
+  symbol: '❙'
+  complete-color: '&a'
+  incomplete-color: '&8'
+
+Experience-Formula: # base + (base * level ^ exponent)
+  base-exp: 3500
+  exponent: 1.75
 
 Time-Formatter:
   second: '&7segundo&f'

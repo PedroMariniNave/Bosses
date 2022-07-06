@@ -65,8 +65,18 @@ public class NumberFormatter {
     }
 
     public String formatDecimal(double number) {
+        DecimalFormat formatter = new DecimalFormat("##.##");
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+
+        symbols.setDecimalSeparator('.');
+        formatter.setDecimalFormatSymbols(symbols);
+        return formatter.format(number);
+    }
+
+    public String formatThousand(double number) {
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+
         symbols.setGroupingSeparator('.');
         formatter.setDecimalFormatSymbols(symbols);
         return formatter.format(number);

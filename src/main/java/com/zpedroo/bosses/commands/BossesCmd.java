@@ -23,7 +23,6 @@ public class BossesCmd implements CommandExecutor {
 
         if (args.length > 0) {
             Player target = null;
-            BigInteger damage = null;
             BigInteger amount = null;
             ItemStack item = null;
             switch (args[0].toUpperCase()) {
@@ -36,58 +35,9 @@ public class BossesCmd implements CommandExecutor {
                 case "SPAWNER":
                     if (player == null || !sender.hasPermission("bosses.admin")) break;
 
-                    player.getInventory().addItem(Items.getBossSpawnerItem());
-                    return true;
-                case "KILLER":
-                    if (!sender.hasPermission("bosses.admin") || args.length < 3) break;
-
-                    target = Bukkit.getPlayer(args[1]);
-                    if (target == null) break;
-
-                    damage = NumberFormatter.getInstance().filter(args[2]);
-                    if (damage.signum() <= 0) break;
-
-                    item = Items.getBossKillerItem(damage.doubleValue());
-                    if (target.getInventory().firstEmpty() != -1) {
-                        target.getInventory().addItem(item);
-                    } else {
-                        target.getWorld().dropItemNaturally(target.getLocation(), item);
-                    }
-                    return true;
-                case "ARROW":
-                    if (!sender.hasPermission("bosses.admin") || args.length < 4) break;
-
-                    target = Bukkit.getPlayer(args[1]);
-                    if (target == null) break;
-
-                    damage = NumberFormatter.getInstance().filter(args[2]);
-                    if (damage.signum() <= 0) break;
-
-                    amount = NumberFormatter.getInstance().filter(args[3]);
-                    if (amount.signum() <= 0) break;
-
-                    item = Items.getBossKillerArrow(damage.doubleValue());
-                    item.setAmount(amount.intValue());
-
-                    if (target.getInventory().firstEmpty() != -1) {
-                        target.getInventory().addItem(item);
-                    } else {
-                        target.getWorld().dropItemNaturally(target.getLocation(), item);
-                    }
+                    giveItemToPlayer(player, Items.getBossSpawnerItem());
                     return true;
                 case "GIVE":
-                    if (!sender.hasPermission("bosses.admin") || args.length < 3) break;
-
-                    target = Bukkit.getPlayer(args[1]);
-                    if (target == null) break;
-
-                    amount = NumberFormatter.getInstance().filter(args[2]);
-                    if (amount.signum() <= 0) break;
-
-                    PlayerData data = DataManager.getInstance().getPlayerData(target);
-                    data.addPoints(amount);
-                    return true;
-                case "ITEM":
                     if (!sender.hasPermission("bosses.admin") || args.length < 3) break;
 
                     target = OfflinePlayerAPI.getPlayer(args[1]);
@@ -97,16 +47,20 @@ public class BossesCmd implements CommandExecutor {
                     if (amount.signum() <= 0) break;
 
                     item = Items.getBossPointsItem(amount);
-                    if (target.getInventory().firstEmpty() != -1) {
-                        target.getInventory().addItem(item);
-                    } else {
-                        target.getWorld().dropItemNaturally(target.getLocation(), item);
-                    }
+                    giveItemToPlayer(target, item);
                     return true;
             }
         }
 
         if (player != null) Menus.getInstance().openMainMenu(player);
         return false;
+    }
+
+    private void giveItemToPlayer(Player target, ItemStack item) {
+        if (target.getInventory().firstEmpty() != -1) {
+            target.getInventory().addItem(item);
+        } else {
+            target.getWorld().dropItemNaturally(target.getLocation(), item);
+        }
     }
 }

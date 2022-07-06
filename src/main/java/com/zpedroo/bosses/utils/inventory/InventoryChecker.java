@@ -8,7 +8,6 @@ public class InventoryChecker {
 
     public static int getFreeSpace(Player player, ItemStack item) {
         int free = 0;
-
         for (int slot = 0; slot < 36; ++slot) {
             ItemStack items = player.getInventory().getItem(slot);
             if (items == null || items.getType().equals(Material.AIR)) {

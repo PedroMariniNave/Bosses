@@ -35,7 +35,6 @@ public class PlayerChatListener implements Listener {
 
         PlayerChat playerChat = getPlayerChat().remove(player);
         int amount = NumberFormatter.getInstance().filter(event.getMessage()).intValue();
-
         if (amount <= 0) {
             player.sendMessage(Messages.INVALID_AMOUNT);
             return;
