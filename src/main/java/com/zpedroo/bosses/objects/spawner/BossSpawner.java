@@ -1,13 +1,17 @@
 package com.zpedroo.bosses.objects.spawner;
 
 import com.zpedroo.bosses.VoltzBosses;
+import com.zpedroo.bosses.enums.EnchantProperty;
 import com.zpedroo.bosses.managers.DataManager;
 import com.zpedroo.bosses.objects.general.Drop;
 import com.zpedroo.bosses.objects.general.PlayerData;
 import com.zpedroo.bosses.objects.general.TopDamageSettings;
 import com.zpedroo.bosses.tasks.BossSpawnerTask;
+import com.zpedroo.bosses.utils.bosskiller.BossKillerEnchant;
+import com.zpedroo.bosses.utils.bosskiller.BossKillerUtils;
 import com.zpedroo.bosses.utils.config.Messages;
 import com.zpedroo.bosses.utils.config.Settings;
+import com.zpedroo.bosses.utils.config.Titles;
 import com.zpedroo.bosses.utils.formatter.NumberFormatter;
 import com.zpedroo.bosses.utils.formatter.TimeFormatter;
 import com.zpedroo.bosses.utils.offlineapi.OfflinePlayerAPI;
@@ -15,8 +19,10 @@ import com.zpedroo.bosses.utils.serialization.LocationSerialization;
 import net.minecraft.server.v1_8_R3.EntityWolf;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.*;
@@ -76,29 +82,13 @@ public class BossSpawner {
         spawnedBoss = bosses.get(new Random().nextInt(bosses.size())); // random boss
         loadBossSpawnerChunk();
         String entityType = spawnedBoss.getEntityType();
-        switch (entityType) {
-            case "ELDER_GUARDIAN":
-                this.bossEntity = location.getWorld().spawnEntity(spawnLocation, EntityType.GUARDIAN);
-                ((Guardian) bossEntity).setElder(true);
-                break;
-            case "WITHER_SKELETON":
-                this.bossEntity = location.getWorld().spawnEntity(spawnLocation, EntityType.SKELETON);
-                ((Skeleton) bossEntity).setSkeletonType(Skeleton.SkeletonType.WITHER);
-                break;
-            default:
-                this.bossEntity = location.getWorld().spawnEntity(spawnLocation, EntityType.valueOf(entityType));
-                break;
-        }
-
-        bossEntity.setMetadata("Boss", new FixedMetadataValue(VoltzBosses.get(), LocationSerialization.serialize(location)));
-        bossEntity.setMetadata("BossHealth", new FixedMetadataValue(VoltzBosses.get(), spawnedBoss.getMaxHealth()));
-        bossEntity.setMetadata("***", new FixedMetadataValue(VoltzBosses.get(), true));
+        setCustomMob(spawnLocation, entityType);
+        setBossMetadata();
 
         LivingEntity livingEntity = (LivingEntity) bossEntity;
         livingEntity.setRemoveWhenFarAway(false);
 
-        if (spawnedBoss.getItemInHand() != null) livingEntity.getEquipment().setItemInHand(spawnedBoss.getItemInHand());
-        if (spawnedBoss.getArmorContents() != null) livingEntity.getEquipment().setArmorContents(spawnedBoss.getArmorContents());
+        setBossEquipments(livingEntity);
 
         switch (bossEntity.getType()) {
             case ZOMBIE:
@@ -111,10 +101,7 @@ public class BossSpawner {
                 break;
         }
 
-        for (String msg : spawnedBoss.getSpawnMessage()) {
-            Bukkit.broadcastMessage(msg);
-        }
-
+        spawnedBoss.getSpawnMessage().forEach(Bukkit::broadcastMessage);
         DataManager.getInstance().getCache().setLastActiveBossSpawner(this);
     }
 
@@ -147,15 +134,8 @@ public class BossSpawner {
         }
     }
 
-    public void damageBoss(int damage) {
-        damageBoss(null, damage);
-    }
-
-    public void damageBoss(Player damager, int damage) {
+    public void damageBoss(@Nullable Player damager, int damage) {
         if (bossEntity == null || bossEntity.isDead()) return;
-
-        int bossHealth = getBossHealth();
-        int newBossHealth = bossHealth - damage;
 
         if (damager != null) {
             int actualDamage = damagers.getOrDefault(damager.getUniqueId(), 0);
@@ -171,10 +151,22 @@ public class BossSpawner {
                         String.valueOf(damage)
                 }));
             }
+
+            ItemStack item = damager.getItemInHand();
+            if (item != null) {
+                giveItemExp(damager, damage, item);
+            }
         }
 
-        bossEntity.setMetadata("BossHealth", new FixedMetadataValue(VoltzBosses.get(), newBossHealth));
-        if (newBossHealth <= 0) {
+        int newBossHealth = getBossHealth() - damage;
+        setBossHealth(newBossHealth);
+    }
+
+    public void setBossHealth(int health) {
+        if (bossEntity == null || bossEntity.isDead()) return;
+
+        bossEntity.setMetadata("BossHealth", new FixedMetadataValue(VoltzBosses.get(), health));
+        if (health <= 0) {
             killBoss();
         }
     }
@@ -318,6 +310,53 @@ public class BossSpawner {
         }, new String[]{
                 TimeFormatter.format(spawnerTask.getNextSpawnInMillis() - System.currentTimeMillis())
         });
+    }
+
+    private void setBossMetadata() {
+        bossEntity.setMetadata("Boss", new FixedMetadataValue(VoltzBosses.get(), LocationSerialization.serialize(location)));
+        bossEntity.setMetadata("BossHealth", new FixedMetadataValue(VoltzBosses.get(), spawnedBoss.getMaxHealth()));
+        bossEntity.setMetadata("***", new FixedMetadataValue(VoltzBosses.get(), true));
+    }
+
+    private void setBossEquipments(LivingEntity livingEntity) {
+        if (spawnedBoss.getItemInHand() != null) livingEntity.getEquipment().setItemInHand(spawnedBoss.getItemInHand());
+        if (spawnedBoss.getArmorContents() != null) livingEntity.getEquipment().setArmorContents(spawnedBoss.getArmorContents());
+    }
+
+    private void setCustomMob(Location spawnLocation, String entityType) {
+        switch (entityType) {
+            case "ELDER_GUARDIAN":
+                this.bossEntity = location.getWorld().spawnEntity(spawnLocation, EntityType.GUARDIAN);
+                ((Guardian) bossEntity).setElder(true);
+                break;
+            case "WITHER_SKELETON":
+                this.bossEntity = location.getWorld().spawnEntity(spawnLocation, EntityType.SKELETON);
+                ((Skeleton) bossEntity).setSkeletonType(Skeleton.SkeletonType.WITHER);
+                break;
+            default:
+                this.bossEntity = location.getWorld().spawnEntity(spawnLocation, EntityType.valueOf(entityType));
+                break;
+        }
+    }
+
+    private void giveItemExp(Player damager, int damage, ItemStack item) {
+        final int oldLevel = BossKillerUtils.getItemLevel(item);
+        double bonus = 1 + BossKillerUtils.getEnchantEffectByItem(item, BossKillerEnchant.EXP.get(), EnchantProperty.MULTIPLIER_PER_LEVEL);
+        double experienceToAdd = spawnedBoss.getBossKillerXpPerHit() * damage * bonus;
+        ItemStack newItem = BossKillerUtils.addItemExperience(item, experienceToAdd);
+        damager.setItemInHand(newItem);
+
+        int newLevel = BossKillerUtils.getItemLevel(newItem);
+        if (oldLevel != newLevel) {
+            String[] placeholders = new String[]{ "{old_level}", "{new_level}" };
+            String[] replacers = new String[]{
+                    NumberFormatter.getInstance().formatThousand(oldLevel), NumberFormatter.getInstance().formatThousand(newLevel)
+            };
+            damager.sendTitle(
+                    StringUtils.replaceEach(Titles.BOSS_KILLER_UPGRADE[0], placeholders, replacers),
+                    StringUtils.replaceEach(Titles.BOSS_KILLER_UPGRADE[1], placeholders, replacers)
+            );
+        }
     }
 
     public void delete() {

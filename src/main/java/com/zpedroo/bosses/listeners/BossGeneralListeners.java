@@ -1,5 +1,6 @@
 package com.zpedroo.bosses.listeners;
 
+import com.zpedroo.bosses.enums.EnchantProperty;
 import com.zpedroo.bosses.managers.DataManager;
 import com.zpedroo.bosses.objects.spawner.BossSpawner;
 import com.zpedroo.bosses.utils.bosskiller.BossKillerEnchant;
@@ -43,7 +44,7 @@ public class BossGeneralListeners implements Listener {
             return;
         }
 
-        int damage = (int) BossKillerUtils.getEnchantEffect(item, BossKillerEnchant.DAMAGE.get());
+        int damage = (int) BossKillerUtils.getEnchantEffectByItem(item, BossKillerEnchant.DAMAGE.get(), EnchantProperty.DAMAGE);
         if (damage <= 0) return;
 
         bossSpawner.damageBoss(player, damage);

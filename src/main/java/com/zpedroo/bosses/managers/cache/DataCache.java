@@ -28,7 +28,6 @@ public class DataCache {
     private final Map<Player, BossBar> bossBars = new HashMap<>(16);
     private final Map<Location, BossSpawner> bossSpawners = getBossSpawnersFromFile();
     private final List<Boss> bosses = getBossesFromConfig();
-    private final List<ShopItem> shopItems = getShopItemsFromFile();
     private List<PlayerData> topBosses = DBConnection.getInstance().getDBManager().getTopBosses();
     private BossSpawner lastActiveBossSpawner;
 
@@ -74,10 +73,10 @@ public class DataCache {
             List<String> hitCommands = FileUtils.get().getStringList(file, "Bosses." + boss + ".hit-commands");
             List<Drop> drops = getDropsFromFile(file, "Bosses." + boss + ".drops");
             Map<Integer, TopDamageSettings> topDamageSettings = getTopDamageSettingsFromFile(file, "Bosses." + boss + ".top-damage");
-
+            double bossKillerXpPerHit = FileUtils.get().getDouble(file, "Bosses." + boss + ".xp-per-damage");
             int maxHealth = FileUtils.get().getInt(file, "Bosses." + boss + ".max-health");
 
-            ret.add(new Boss(entityType, bossBar, equipments.toArray(new ItemStack[4]), itemInHand, spawnMessage, killMessage, hitCommands, drops, topDamageSettings, maxHealth));
+            ret.add(new Boss(entityType, bossBar, equipments.toArray(new ItemStack[4]), itemInHand, spawnMessage, killMessage, hitCommands, drops, topDamageSettings, bossKillerXpPerHit, maxHealth));
         }
 
         return ret;
@@ -113,32 +112,6 @@ public class DataCache {
             List<String> rewards = FileUtils.get().getStringList(file, where + "." + position + ".commands");
 
             ret.put(pos, new TopDamageSettings(display, rewards));
-        }
-
-        return ret;
-    }
-
-    private List<ShopItem> getShopItemsFromFile() {
-        FileUtils.Files file = FileUtils.Files.SHOP;
-
-        Set<String> shopItems = FileUtils.get().getSection(file, "Inventory.items");
-        List<ShopItem> ret = new ArrayList<>(shopItems.size());
-
-        for (String shopItem : shopItems) {
-            BigInteger price = NumberFormatter.getInstance().filter(FileUtils.get().getString(file, "Inventory.items." + shopItem + ".price"));
-            int defaultAmount = FileUtils.get().getInt(file, "Inventory.items." + shopItem + ".default-amount", 1);
-            ItemStack display = ItemBuilder.build(FileUtils.get().getFile(file).get(), "Inventory.items." + shopItem + ".display", new String[]{
-                    "{price}"
-            }, new String[]{
-                    NumberFormatter.getInstance().format(price)
-            }).build();
-            ItemStack itemToGive = null;
-            if (FileUtils.get().getFile(file).get().contains("Inventory.items." + shopItem + ".shop-item")) {
-                itemToGive = ItemBuilder.build(FileUtils.get().getFile(file).get(), "Inventory.items." + shopItem + ".shop-item").build();
-            }
-            List<String> commands = FileUtils.get().getStringList(file, "Inventory.items." + shopItem + ".commands");
-
-            ret.add(new ShopItem(price, defaultAmount, display, itemToGive, commands));
         }
 
         return ret;

@@ -87,8 +87,8 @@ public class VoltzBosses extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new BossGeneralListeners(), this);
         getServer().getPluginManager().registerEvents(new DropListeners(), this);
-        getServer().getPluginManager().registerEvents(new PlayerChatListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerGeneralListeners(), this);
+        getServer().getPluginManager().registerEvents(new PointsListeners(), this);
         getServer().getPluginManager().registerEvents(new RegionListeners(), this);
 
         getServer().getPluginManager().registerEvents(new EntityDamageListener(), this);

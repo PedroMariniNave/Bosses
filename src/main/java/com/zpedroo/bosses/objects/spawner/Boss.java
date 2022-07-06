@@ -20,6 +20,7 @@ public class Boss {
     private final List<String> hitCommands;
     private final List<Drop> drops;
     private final Map<Integer, TopDamageSettings> topDamageSettings;
+    private final double bossKillerXpPerHit;
     private final int maxHealth;
 
     public int getTopDamagersAmount() {

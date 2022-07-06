@@ -110,7 +110,6 @@ public class FileUtils {
         MOBS_AI("mobs_ai", "configuration-files", ""),
         LOCATIONS("locations", "configuration-files", ""),
         MAIN("main", "menus", "menus"),
-        SHOP("shop", "menus", "menus"),
         TOP_BOSSES("top_bosses", "menus", "menus"),
         UPGRADE("upgrade", "menus", "menus");
 

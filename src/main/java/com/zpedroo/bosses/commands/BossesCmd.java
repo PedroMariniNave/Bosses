@@ -1,12 +1,9 @@
 package com.zpedroo.bosses.commands;
 
-import com.zpedroo.bosses.managers.DataManager;
-import com.zpedroo.bosses.objects.general.PlayerData;
 import com.zpedroo.bosses.utils.config.Items;
 import com.zpedroo.bosses.utils.formatter.NumberFormatter;
 import com.zpedroo.bosses.utils.menu.Menus;
 import com.zpedroo.bosses.utils.offlineapi.OfflinePlayerAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,9 +23,6 @@ public class BossesCmd implements CommandExecutor {
             BigInteger amount = null;
             ItemStack item = null;
             switch (args[0].toUpperCase()) {
-                case "SHOP":
-                    if (player != null) Menus.getInstance().openShopMenu(player);
-                    return true;
                 case "TOP":
                     if (player != null) Menus.getInstance().openTopMenu(player);
                     return true;
@@ -46,7 +40,7 @@ public class BossesCmd implements CommandExecutor {
                     amount = NumberFormatter.getInstance().filter(args[2]);
                     if (amount.signum() <= 0) break;
 
-                    item = Items.getBossPointsItem(amount);
+                    item = Items.getBossPointsItem(amount.intValue());
                     giveItemToPlayer(target, item);
                     return true;
             }

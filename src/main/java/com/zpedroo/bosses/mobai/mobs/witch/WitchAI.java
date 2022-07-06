@@ -302,7 +302,7 @@ public class WitchAI {
                     int finalHealth = health + toHeal;
                     if (finalHealth > bossSpawner.getSpawnedBoss().getMaxHealth()) finalHealth = bossSpawner.getSpawnedBoss().getMaxHealth();
 
-                    bossSpawner.damageBoss(null, finalHealth);
+                    bossSpawner.setBossHealth(finalHealth);
                     return;
                 }
 
