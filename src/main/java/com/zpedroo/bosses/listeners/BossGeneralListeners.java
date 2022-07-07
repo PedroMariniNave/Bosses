@@ -55,9 +55,16 @@ public class BossGeneralListeners implements Listener {
     public void onMinionDamage(EntityDamageByEntityEvent event) {
         if (!event.getEntity().hasMetadata("Minion")) return;
 
-        double damage = event.getDamage();
+        Player player = (Player) event.getDamager();
+        ItemStack item = player.getItemInHand();
+        if (!BossKillerUtils.isBossKiller(item)) {
+            event.setCancelled(true);
+            player.sendMessage(Messages.NEED_BOSS_KILLER_ITEM);
+            return;
+        }
 
-        // todo changes
+        int damage = (int) BossKillerUtils.getEnchantEffectByItem(item, Enchants.DAMAGE.get(), EnchantProperty.DAMAGE);
+        if (damage <= 0) return;
 
         LivingEntity entity = (LivingEntity) event.getEntity();
         if (entity.getHealth() - damage <= 0) {

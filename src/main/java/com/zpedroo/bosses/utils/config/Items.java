@@ -39,7 +39,7 @@ public class Items {
     @NotNull
     public static ItemStack getBossKillerItem() {
         NBTItem nbt = new NBTItem(BOSS_KILLER_ITEM.clone());
-        nbt.setBoolean("BossKiller", true);
+        nbt.setBoolean(BossKillerUtils.IDENTIFIER_NBT, true);
 
         ItemStack item = nbt.getItem();
         return replaceItemPlaceholders(item, BossKillerUtils.getPlaceholders(), BossKillerUtils.getReplacers(item));

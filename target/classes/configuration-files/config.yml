@@ -156,13 +156,12 @@ Enchants:
       initial-value: 3
       upgrade-per-level: 0
   exp:
-    initial-value: 1 # nunca deixe abaixo de 1, caso contrário o xp irá reduzir por conta da matemática
     level:
       initial: 0
       max: 10
       requirement-per-upgrade: 5
     cost-per-level: 200
-    multiplier-per-level: 0.25 # 1 + multiplier * exp
+    multiplier-per-level: 0.25 # exp * (1 + multiplier)
 
 Spawner-Item:
   type: SKULL_ITEM
@@ -195,9 +194,19 @@ Boss-Killer-Item:
     - ''
     - ' &8► &fNível: &7{level} {progress}'
     - ' &8► &fRelíquias: &7{points} &6&l✶'
+    - ' &8► &fQualidade: {quality}'
     - ''
-    - '&8Clique com o botão direito'
-    - '&8para evoluir!'
+    - '&8Clique para evoluir!'
+
+Quality:
+  initial: 0
+  max: 5
+  item-level-per-quality: 100
+  cost-per-quality: 5000
+  bonus-per-quality: 0.4
+  symbol: '✯'
+  complete-color: '&e'
+  incomplete-color: '&8'
 
 Progress:
   display-amount: 10

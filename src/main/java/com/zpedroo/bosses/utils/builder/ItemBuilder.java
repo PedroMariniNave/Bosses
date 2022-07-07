@@ -196,8 +196,7 @@ public class ItemBuilder {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return this;
 
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        meta.addItemFlags(ItemFlag.values());
         item.setItemMeta(meta);
         return this;
     }

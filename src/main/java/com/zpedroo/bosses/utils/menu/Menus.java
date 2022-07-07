@@ -1,11 +1,11 @@
 package com.zpedroo.bosses.utils.menu;
 
 import com.google.common.collect.Lists;
+import com.zpedroo.bosses.enums.Enchants;
 import com.zpedroo.bosses.managers.DataManager;
 import com.zpedroo.bosses.objects.general.Enchant;
 import com.zpedroo.bosses.objects.general.PlayerData;
 import com.zpedroo.bosses.utils.FileUtils;
-import com.zpedroo.bosses.enums.Enchants;
 import com.zpedroo.bosses.utils.bosskiller.BossKillerUtils;
 import com.zpedroo.bosses.utils.builder.InventoryBuilder;
 import com.zpedroo.bosses.utils.builder.InventoryUtils;
@@ -127,30 +127,37 @@ public class Menus extends InventoryUtils {
 
         InventoryBuilder inventory = new InventoryBuilder(title, size);
 
-        for (String str : FileUtils.get().getSection(file, "Inventory.items")) {
-            String enchantmentName = FileUtils.get().getString(file, "Inventory.items." + str + ".enchant");
-            Enchants enchants = Enchants.getByName(enchantmentName);
-            Enchant enchant = enchants == null ? null : enchants.get();
-            ItemStack item = null;
-            String toGet = getItemStatus(itemToUpgrade, enchant);
-            if (fileConfiguration.contains("Inventory.items." + str + "." + toGet)) {
-                String[] placeholders = getUpgradePlaceholders();
-                String[] replacers = getUpgradeReplacers(itemToUpgrade, enchant);
-
-                item = ItemBuilder.build(FileUtils.get().getFile(file).get(), "Inventory.items." + str + "." + toGet, placeholders, replacers).build();
-            } else {
-                item = ItemBuilder.build(FileUtils.get().getFile(file).get(), "Inventory.items." + str).build();
-            }
-
-            int slot = FileUtils.get().getInt(file, "Inventory.items." + str + ".slot");
+        for (String items : FileUtils.get().getSection(file, "Inventory.items")) {
+            String action = FileUtils.get().getString(file, "Inventory.items." + items + ".action");
+            String[] split = action.split(":");
+            String upgradeElementName = split.length > 1 ? split[1] : "NULL";
+            Enchant enchant = Enchants.getEnchantByName(upgradeElementName);
+            ItemStack item = buildUpgradeItem(itemToUpgrade, fileConfiguration, items, action, enchant);
+            int slot = FileUtils.get().getInt(file, "Inventory.items." + items + ".slot");
 
             inventory.addItem(item, slot, () -> {
-                if (enchant == null || !BossKillerUtils.canUpgrade(itemToUpgrade, enchant)) {
-                    player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
-                    return;
-                }
+                if (!StringUtils.containsIgnoreCase(action, "UPGRADE:")) return;
 
-                ItemStack newItem = BossKillerUtils.upgradeEnchantment(itemToUpgrade, enchant);
+                ItemStack newItem = null;
+                switch (upgradeElementName.toUpperCase()) {
+                    case "QUALITY":
+                        if (!BossKillerUtils.canUpgradeQuality(itemToUpgrade)) {
+                            player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
+                            return;
+                        }
+
+                        newItem = BossKillerUtils.upgradeQuality(itemToUpgrade);
+                        break;
+                    default:
+                        if (enchant == null) return;
+                        if (!BossKillerUtils.canUpgradeEnchant(itemToUpgrade, enchant)) {
+                            player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1f, 1f);
+                            return;
+                        }
+
+                        newItem = BossKillerUtils.upgradeEnchantment(itemToUpgrade, enchant);
+                        break;
+                }
 
                 player.setItemInHand(newItem);
                 openUpgradeMenu(player, newItem);
@@ -166,6 +173,35 @@ public class Menus extends InventoryUtils {
         inventory.open(player);
     }
 
+    @NotNull
+    private ItemStack buildUpgradeItem(ItemStack itemToUpgrade, FileConfiguration fileConfiguration, String items, String action, Enchant enchant) {
+        ItemStack item = null;
+        String toGet = getElementToGet(itemToUpgrade, action, enchant);
+
+        if (fileConfiguration.contains("Inventory.items." + items + "." + toGet)) {
+            String[] placeholders = getUpgradePlaceholders();
+            String[] replacers = getUpgradeReplacers(itemToUpgrade, enchant);
+
+            item = ItemBuilder.build(fileConfiguration, "Inventory.items." + items + "." + toGet, placeholders, replacers).build();
+        } else {
+            item = ItemBuilder.build(fileConfiguration, "Inventory.items." + items).build();
+        }
+
+        return item;
+    }
+
+    @Nullable
+    private String getElementToGet(ItemStack itemToUpgrade, String action, Enchant enchant) {
+        String toGet = null;
+        if (enchant != null) {
+            toGet = getItemEnchantStatus(itemToUpgrade, enchant);
+        } else if (StringUtils.containsIgnoreCase(action, "QUALITY")) {
+            toGet = getItemQualityStatus(itemToUpgrade);
+        }
+
+        return toGet;
+    }
+
     private String[] getUpgradePlaceholders() {
         List<String> placeholders = Lists.newArrayList(BossKillerUtils.getPlaceholders());
         placeholders.add("{cost}");
@@ -174,21 +210,37 @@ public class Menus extends InventoryUtils {
         return placeholders.toArray(new String[0]);
     }
 
-    private String[] getUpgradeReplacers(@NotNull ItemStack item, Enchant enchant) {
+    private String[] getUpgradeReplacers(@NotNull ItemStack item, @Nullable Enchant enchant) {
         List<String> replacers = Lists.newArrayList(BossKillerUtils.getReplacers(item));
-        replacers.add(NumberFormatter.getInstance().formatThousand(BossKillerUtils.getUpgradeCost(item, enchant)));
-        replacers.add(NumberFormatter.getInstance().formatThousand(BossKillerUtils.getUpgradeLevelRequired(item, enchant)));
+        replacers.add(NumberFormatter.getInstance().formatThousand(
+                enchant == null ? BossKillerUtils.getQualityUpgradeCost(item) : BossKillerUtils.getEnchantUpgradeCost(item, enchant))
+        );
+        replacers.add(NumberFormatter.getInstance().formatThousand(
+                enchant == null ? BossKillerUtils.getQualityUpgradeLevelRequired(item) : BossKillerUtils.getEnchantUpgradeLevelRequired(item, enchant))
+        );
 
         return replacers.toArray(new String[0]);
     }
 
-    private String getItemStatus(@NotNull ItemStack item, @Nullable Enchant enchant) {
+    private String getItemEnchantStatus(@NotNull ItemStack item, @Nullable Enchant enchant) {
         if (enchant == null) return "undefined";
-        if (!BossKillerUtils.isUnlocked(item, enchant)) {
-            return "locked";
-        } else if (BossKillerUtils.isMaxLevel(item, enchant)) {
+        if (BossKillerUtils.isMaxEnchantLevel(item, enchant)) {
             return "max-level";
-        } else if (!BossKillerUtils.canUpgrade(item, enchant)) {
+        } else if (!BossKillerUtils.isUnlockedEnchant(item, enchant)) {
+            return "locked";
+        } else if (!BossKillerUtils.canUpgradeEnchant(item, enchant)) {
+            return "can-not-upgrade";
+        }
+
+        return "can-upgrade";
+    }
+
+    private String getItemQualityStatus(@NotNull ItemStack item) {
+        if (BossKillerUtils.isMaxQualityLevel(item)) {
+            return "max-level";
+        } else if (!BossKillerUtils.isUnlockedQuality(item)) {
+            return "locked";
+        } else if (!BossKillerUtils.canUpgradeQuality(item)) {
             return "can-not-upgrade";
         }
 
