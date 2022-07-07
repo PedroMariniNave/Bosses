@@ -2,7 +2,6 @@ package com.zpedroo.bosses.listeners;
 
 import com.zpedroo.bosses.managers.DataManager;
 import com.zpedroo.bosses.objects.spawner.BossSpawner;
-import com.zpedroo.bosses.utils.bosskiller.BossKillerEnchant;
 import com.zpedroo.bosses.utils.bosskiller.BossKillerUtils;
 import com.zpedroo.bosses.utils.config.Items;
 import com.zpedroo.bosses.utils.menu.Menus;

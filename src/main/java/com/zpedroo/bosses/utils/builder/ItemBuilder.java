@@ -111,6 +111,10 @@ public class ItemBuilder {
             builder.hideEnchants();
         }
 
+        if (file.contains(where + ".unbreakable") && file.getBoolean(where + ".unbreakable")) {
+            builder.setUnbreakable();
+        }
+
         return builder;
     }
 
@@ -203,6 +207,15 @@ public class ItemBuilder {
         if (meta == null) return this;
 
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        item.setItemMeta(meta);
+        return this;
+    }
+
+    public ItemBuilder setUnbreakable() {
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return this;
+
+        meta.spigot().setUnbreakable(true);
         item.setItemMeta(meta);
         return this;
     }

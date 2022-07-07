@@ -2,7 +2,7 @@ package com.zpedroo.bosses.utils.config;
 
 import com.zpedroo.bosses.objects.general.Enchant;
 import com.zpedroo.bosses.utils.FileUtils;
-import com.zpedroo.bosses.utils.bosskiller.BossKillerEnchant;
+import com.zpedroo.bosses.enums.Enchants;
 import com.zpedroo.bosses.utils.bosskiller.BossKillerUtils;
 import com.zpedroo.bosses.utils.builder.ItemBuilder;
 import com.zpedroo.bosses.utils.formatter.NumberFormatter;
@@ -50,8 +50,8 @@ public class Items {
         NBTItem nbt = new NBTItem(BOSS_KILLER_ITEM.clone());
         nbt.setBoolean(BossKillerUtils.IDENTIFIER_NBT, true);
 
-        for (BossKillerEnchant bossKillerEnchant : BossKillerEnchant.values()) {
-            Enchant enchant = bossKillerEnchant.get();
+        for (Enchants enchants : Enchants.values()) {
+            Enchant enchant = enchants.get();
             int level = BossKillerUtils.getEnchantmentLevel(baseItem, enchant);
             if (level <= enchant.getInitialLevel()) continue;
 

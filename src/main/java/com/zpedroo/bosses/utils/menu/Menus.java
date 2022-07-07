@@ -5,7 +5,7 @@ import com.zpedroo.bosses.managers.DataManager;
 import com.zpedroo.bosses.objects.general.Enchant;
 import com.zpedroo.bosses.objects.general.PlayerData;
 import com.zpedroo.bosses.utils.FileUtils;
-import com.zpedroo.bosses.utils.bosskiller.BossKillerEnchant;
+import com.zpedroo.bosses.enums.Enchants;
 import com.zpedroo.bosses.utils.bosskiller.BossKillerUtils;
 import com.zpedroo.bosses.utils.builder.InventoryBuilder;
 import com.zpedroo.bosses.utils.builder.InventoryUtils;
@@ -129,8 +129,8 @@ public class Menus extends InventoryUtils {
 
         for (String str : FileUtils.get().getSection(file, "Inventory.items")) {
             String enchantmentName = FileUtils.get().getString(file, "Inventory.items." + str + ".enchant");
-            BossKillerEnchant bossKillerEnchant = BossKillerEnchant.getByName(enchantmentName);
-            Enchant enchant = bossKillerEnchant == null ? null : bossKillerEnchant.get();
+            Enchants enchants = Enchants.getByName(enchantmentName);
+            Enchant enchant = enchants == null ? null : enchants.get();
             ItemStack item = null;
             String toGet = getItemStatus(itemToUpgrade, enchant);
             if (fileConfiguration.contains("Inventory.items." + str + "." + toGet)) {
@@ -177,7 +177,7 @@ public class Menus extends InventoryUtils {
     private String[] getUpgradeReplacers(@NotNull ItemStack item, Enchant enchant) {
         List<String> replacers = Lists.newArrayList(BossKillerUtils.getReplacers(item));
         replacers.add(NumberFormatter.getInstance().formatThousand(BossKillerUtils.getUpgradeCost(item, enchant)));
-        replacers.add(NumberFormatter.getInstance().formatThousand(BossKillerUtils.getUpgradeLevel(item, enchant)));
+        replacers.add(NumberFormatter.getInstance().formatThousand(BossKillerUtils.getUpgradeLevelRequired(item, enchant)));
 
         return replacers.toArray(new String[0]);
     }

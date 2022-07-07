@@ -130,14 +130,18 @@ Enchants:
       max: 1000
       requirement-per-upgrade: 5
     cost-per-level: 100
-    damage-per-level: 25
+    damage:
+      initial-value: 25
+      upgrade-per-level: 25
   crit-damage:
     level:
       initial: 0
       max: 10
       requirement-per-upgrade: 5
     cost-per-level: 175
-    chance-per-level: 1.25
+    chance:
+      initial-value: 0
+      upgrade-per-level: 1.25
     damage-multiplier: 2
   area-damage:
     level:
@@ -145,22 +149,20 @@ Enchants:
       max: 10
       requirement-per-upgrade: 5
     cost-per-level: 250
-    chance-per-level: 1.5
-    radius: 3 # raio atingido
+    chance:
+      initial-value: 0
+      upgrade-per-level: 1.5
+    radius:
+      initial-value: 3
+      upgrade-per-level: 0
   exp:
+    initial-value: 1 # nunca deixe abaixo de 1, caso contrário o xp irá reduzir por conta da matemática
     level:
       initial: 0
       max: 10
       requirement-per-upgrade: 5
     cost-per-level: 200
     multiplier-per-level: 0.25 # 1 + multiplier * exp
-  durability:
-    level:
-      initial: 0
-      max: 10
-      requirement-per-upgrade: 5
-    cost-per-level: 75
-    chance-per-level: 10 # chance de não danificar o item
 
 Spawner-Item:
   type: SKULL_ITEM
@@ -183,13 +185,13 @@ Boss-Killer-Item:
   type: GOLD_SWORD
   glow: true
   hide-attributes: true
+  unbreakable: true
   name: '&6Matadora de Bosses'
   lore:
     - '&7Dano: &f{damage_damage} &4&l❤'
     - '&7Dano em Área: &f{area-damage}'
     - '&7Crítico: &f{crit-damage}'
-    - '&7EXP: &f{exp_multiplier}x'
-    - '&7Inquebrável: &f{durability}'
+    - '&7EXP: &f{exp}'
     - ''
     - ' &8► &fNível: &7{level} {progress}'
     - ' &8► &fRelíquias: &7{points} &6&l✶'

@@ -4,10 +4,11 @@ import com.zpedroo.bosses.VoltzBosses;
 import com.zpedroo.bosses.enums.EnchantProperty;
 import com.zpedroo.bosses.managers.DataManager;
 import com.zpedroo.bosses.objects.general.Drop;
+import com.zpedroo.bosses.objects.general.Enchant;
 import com.zpedroo.bosses.objects.general.PlayerData;
 import com.zpedroo.bosses.objects.general.TopDamageSettings;
 import com.zpedroo.bosses.tasks.BossSpawnerTask;
-import com.zpedroo.bosses.utils.bosskiller.BossKillerEnchant;
+import com.zpedroo.bosses.enums.Enchants;
 import com.zpedroo.bosses.utils.bosskiller.BossKillerUtils;
 import com.zpedroo.bosses.utils.config.Messages;
 import com.zpedroo.bosses.utils.config.Settings;
@@ -155,6 +156,9 @@ public class BossSpawner {
             ItemStack item = damager.getItemInHand();
             if (item != null) {
                 giveItemExp(damager, damage, item);
+
+                damage = handleCritDamageEnchant(damage, item);
+                handleAreaDamageEnchant(damage, item);
             }
         }
 
@@ -312,6 +316,34 @@ public class BossSpawner {
         });
     }
 
+    private void handleAreaDamageEnchant(int damage, ItemStack item) {
+        Enchant areaDamageEnchant = Enchants.AREA_DAMAGE.get();
+        EnchantProperty chanceProperty = EnchantProperty.CHANCE;
+        double areaDamageChance = BossKillerUtils.getEnchantEffectByItem(item, areaDamageEnchant, chanceProperty);
+        double randomNumber = ThreadLocalRandom.current().nextDouble(0, 100);
+        if (randomNumber < areaDamageChance) {
+            int radius = (int) BossKillerUtils.getEnchantEffectByItem(item, areaDamageEnchant, EnchantProperty.RADIUS);
+            for (Entity entity : bossEntity.getNearbyEntities(radius, radius, radius)) {
+                if (!(entity instanceof LivingEntity) || !entity.hasMetadata("Minion")) continue;
+
+                LivingEntity livingEntity = (LivingEntity) entity;
+                livingEntity.damage(damage);
+            }
+        }
+    }
+
+    private int handleCritDamageEnchant(int damage, ItemStack item) {
+        Enchant critDamageEnchant = Enchants.CRIT_DAMAGE.get();
+        EnchantProperty chanceProperty = EnchantProperty.CHANCE;
+        double critDamageChance = BossKillerUtils.getEnchantEffectByItem(item, critDamageEnchant, chanceProperty);
+        double randomNumber = ThreadLocalRandom.current().nextDouble(0, 100);
+        if (randomNumber < critDamageChance) {
+            damage *= critDamageEnchant.getPropertyEffect(EnchantProperty.CHANCE).doubleValue();
+        }
+
+        return damage;
+    }
+
     private void setBossMetadata() {
         bossEntity.setMetadata("Boss", new FixedMetadataValue(VoltzBosses.get(), LocationSerialization.serialize(location)));
         bossEntity.setMetadata("BossHealth", new FixedMetadataValue(VoltzBosses.get(), spawnedBoss.getMaxHealth()));
@@ -341,7 +373,7 @@ public class BossSpawner {
 
     private void giveItemExp(Player damager, int damage, ItemStack item) {
         final int oldLevel = BossKillerUtils.getItemLevel(item);
-        double bonus = 1 + BossKillerUtils.getEnchantEffectByItem(item, BossKillerEnchant.EXP.get(), EnchantProperty.MULTIPLIER_PER_LEVEL);
+        double bonus = 1 + BossKillerUtils.getEnchantEffectByItem(item, Enchants.EXP.get(), EnchantProperty.MULTIPLIER);
         double experienceToAdd = spawnedBoss.getBossKillerXpPerHit() * damage * bonus;
         ItemStack newItem = BossKillerUtils.addItemExperience(item, experienceToAdd);
         damager.setItemInHand(newItem);

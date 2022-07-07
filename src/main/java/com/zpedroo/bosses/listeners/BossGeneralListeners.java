@@ -3,15 +3,12 @@ package com.zpedroo.bosses.listeners;
 import com.zpedroo.bosses.enums.EnchantProperty;
 import com.zpedroo.bosses.managers.DataManager;
 import com.zpedroo.bosses.objects.spawner.BossSpawner;
-import com.zpedroo.bosses.utils.bosskiller.BossKillerEnchant;
+import com.zpedroo.bosses.enums.Enchants;
 import com.zpedroo.bosses.utils.bosskiller.BossKillerUtils;
 import com.zpedroo.bosses.utils.config.Messages;
 import com.zpedroo.bosses.utils.serialization.LocationSerialization;
-import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -44,7 +41,7 @@ public class BossGeneralListeners implements Listener {
             return;
         }
 
-        int damage = (int) BossKillerUtils.getEnchantEffectByItem(item, BossKillerEnchant.DAMAGE.get(), EnchantProperty.DAMAGE);
+        int damage = (int) BossKillerUtils.getEnchantEffectByItem(item, Enchants.DAMAGE.get(), EnchantProperty.DAMAGE);
         if (damage <= 0) return;
 
         bossSpawner.damageBoss(player, damage);
