@@ -379,16 +379,24 @@ public class BossSpawner {
         damager.setItemInHand(newItem);
 
         int newLevel = BossKillerUtils.getItemLevel(newItem);
-        if (oldLevel != newLevel) {
-            String[] placeholders = new String[]{ "{old_level}", "{new_level}" };
-            String[] replacers = new String[]{
-                    NumberFormatter.getInstance().formatThousand(oldLevel), NumberFormatter.getInstance().formatThousand(newLevel)
-            };
-            damager.sendTitle(
-                    StringUtils.replaceEach(Titles.BOSS_KILLER_UPGRADE[0], placeholders, replacers),
-                    StringUtils.replaceEach(Titles.BOSS_KILLER_UPGRADE[1], placeholders, replacers)
-            );
+        if (isNewLevel(oldLevel, newLevel)) {
+            sendUpgradeTitle(damager, oldLevel, newLevel);
         }
+    }
+
+    private boolean isNewLevel(int oldLevel, int newLevel) {
+        return oldLevel != newLevel;
+    }
+
+    private void sendUpgradeTitle(Player damager, int oldLevel, int newLevel) {
+        String[] placeholders = new String[]{ "{old_level}", "{new_level}" };
+        String[] replacers = new String[]{
+                NumberFormatter.getInstance().formatThousand(oldLevel), NumberFormatter.getInstance().formatThousand(newLevel)
+        };
+        damager.sendTitle(
+                StringUtils.replaceEach(Titles.BOSS_KILLER_UPGRADE[0], placeholders, replacers),
+                StringUtils.replaceEach(Titles.BOSS_KILLER_UPGRADE[1], placeholders, replacers)
+        );
     }
 
     public void delete() {
