@@ -2,6 +2,8 @@ package com.zpedroo.bosses.utils.config;
 
 import com.zpedroo.bosses.utils.FileUtils;
 import com.zpedroo.bosses.utils.color.Colorize;
+import com.zpedroo.multieconomy.api.CurrencyAPI;
+import com.zpedroo.multieconomy.objects.general.Currency;
 
 import java.util.List;
 
@@ -24,6 +26,8 @@ public class Settings {
     public static final int BOSS_KILLER_PICKUP_COOLDOWN = FileUtils.get().getInt(FileUtils.Files.CONFIG, "Settings.boss-killer-pickup-cooldown");
 
     public static final long BOSS_SPAWN_TIMER = FileUtils.get().getLong(FileUtils.Files.CONFIG, "Settings.boss-spawn-timer");
+
+    public static final Currency QUALITY_CURRENCY = CurrencyAPI.getCurrency(FileUtils.get().getString(FileUtils.Files.CONFIG, "Settings.quality-currency"));
 
     public static final String[] BOSS_SPAWNER_HOLOGRAM = Colorize.getColored(FileUtils.get().getStringList(FileUtils.Files.CONFIG, "Settings.boss-spawner-hologram"))
             .toArray(new String[1]);

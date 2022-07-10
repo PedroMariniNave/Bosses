@@ -15,6 +15,7 @@ Settings:
   target-radius: 10
   boss-spawn-timer: 600 # em segundos
   boss-killer-pickup-cooldown: 5 # segundos
+  quality-currency: 'coins' # MultiEconomy compatibility. Empty or null = plugin points
   boss-spawner-hologram:
     - '&6&lSPAWNER DE BOSSES'
     - ''
