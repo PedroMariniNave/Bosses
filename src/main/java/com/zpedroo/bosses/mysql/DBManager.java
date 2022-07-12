@@ -10,9 +10,8 @@ import java.util.*;
 public class DBManager {
 
     public void savePlayerData(PlayerData data) {
-        executeUpdate("REPLACE INTO `" + DBConnection.TABLE + "` (`uuid`, `points_amount`, `killed_bosses_amount`) VALUES " +
+        executeUpdate("REPLACE INTO `" + DBConnection.TABLE + "` (`uuid`, `killed_bosses_amount`) VALUES " +
                 "('" + data.getUniqueId().toString() + "', " +
-                "'" + data.getPointsAmount() + "', " +
                 "'" + data.getKilledBossesAmount() + "');");
     }
 
@@ -29,10 +28,9 @@ public class DBManager {
 
             if (result.next()) {
                 UUID uuid = UUID.fromString(result.getString(1));
-                BigInteger pointsAmount = result.getBigDecimal(2).toBigInteger();
-                int killedBossesAmount = result.getInt(3);
+                int killedBossesAmount = result.getInt(2);
 
-                return new PlayerData(uuid, pointsAmount, killedBossesAmount);
+                return new PlayerData(uuid, killedBossesAmount);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -40,7 +38,7 @@ public class DBManager {
             closeConnection(connection, result, preparedStatement, null);
         }
 
-        return new PlayerData(player.getUniqueId(), BigInteger.ZERO, 0);
+        return new PlayerData(player.getUniqueId(), 0);
     }
 
     public List<PlayerData> getTopBosses() {
@@ -58,10 +56,9 @@ public class DBManager {
 
             while (result.next()) {
                 UUID uuid = UUID.fromString(result.getString(1));
-                BigInteger pointsAmount = result.getBigDecimal(2).toBigInteger();
-                int killedBossesAmount = result.getInt(3);
+                int killedBossesAmount = result.getInt(2);
 
-                top.add(new PlayerData(uuid, pointsAmount, killedBossesAmount));
+                top.add(new PlayerData(uuid, killedBossesAmount));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -98,7 +95,7 @@ public class DBManager {
     }
 
     protected void createTable() {
-        executeUpdate("CREATE TABLE IF NOT EXISTS `" + DBConnection.TABLE + "` (`uuid` VARCHAR(255), `points_amount` DECIMAL(40,0), `killed_bosses_amount` INTEGER, PRIMARY KEY(`uuid`));");
+        executeUpdate("CREATE TABLE IF NOT EXISTS `" + DBConnection.TABLE + "` (`uuid` VARCHAR(255), `killed_bosses_amount` INTEGER, PRIMARY KEY(`uuid`));");
     }
 
     private Connection getConnection() throws SQLException {
