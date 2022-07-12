@@ -38,8 +38,6 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         switch (identifier.toUpperCase()) {
             case "KILLED":
                 return NumberFormatter.getInstance().formatDecimal(data.getKilledBossesAmount());
-            case "POINTS":
-                return NumberFormatter.getInstance().format(data.getPointsAmount());
             case "HEALTH":
                 BossSpawner bossSpawner = DataManager.getInstance().getLastActiveBossSpawner();
                 if (bossSpawner == null) return "-/-";

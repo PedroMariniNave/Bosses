@@ -199,7 +199,7 @@ public class BossSpawner {
             }, new String[]{
                     String.valueOf(position),
                     player.getName(),
-                    NumberFormatter.getInstance().formatDecimal(damageAmount)
+                    NumberFormatter.getInstance().formatThousand(damageAmount)
             }));
         }
 

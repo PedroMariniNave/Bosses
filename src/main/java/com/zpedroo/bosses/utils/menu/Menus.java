@@ -47,12 +47,10 @@ public class Menus extends InventoryUtils {
         for (String str : FileUtils.get().getSection(file, "Inventory.items")) {
             ItemStack item = ItemBuilder.build(FileUtils.get().getFile(file).get(), "Inventory.items." + str, new String[]{
                     "{player}",
-                    "{boss_points}",
                     "{killed_bosses}"
             }, new String[]{
                     player.getName(),
-                    NumberFormatter.getInstance().format(data.getPointsAmount()),
-                    NumberFormatter.getInstance().formatDecimal(data.getKilledBossesAmount())
+                    NumberFormatter.getInstance().formatThousand(data.getKilledBossesAmount())
             }).build();
             String action = FileUtils.get().getString(file, "Inventory.items." + str + ".action");
 
@@ -103,13 +101,11 @@ public class Menus extends InventoryUtils {
         for (PlayerData data : DataManager.getInstance().getCache().getTopBosses()) {
             ItemStack item = ItemBuilder.build(FileUtils.get().getFile(file).get(), "Item", new String[]{
                     "{player}",
-                    "{boss_points}",
                     "{killed_bosses}",
                     "{pos}"
             }, new String[]{
                     Bukkit.getOfflinePlayer(data.getUniqueId()).getName(),
-                    NumberFormatter.getInstance().format(data.getPointsAmount()),
-                    NumberFormatter.getInstance().formatDecimal(data.getKilledBossesAmount()),
+                    NumberFormatter.getInstance().formatThousand(data.getKilledBossesAmount()),
                     String.valueOf(++pos)
             }).build();
 
