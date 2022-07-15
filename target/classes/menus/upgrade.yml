@@ -1,0 +1,267 @@
+Inventory:
+  title: "Evolução"
+  size: 45
+  item-slot: 12 # -1 = disabled
+  items:
+    1:
+      slot: 14
+      action: 'UPGRADE:QUALITY'
+      locked:
+        type: SKULL_ITEM
+        owner: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGYwZWYxNjc0YjcxZjhkYWQ3ZjU4ODJmMTNjZjI0MTE2NTNmNmEyZjllOTBlNDViMTgxZjQ0YjllZWYyNzhmZiJ9fX0=
+        name: "&cQualidade"
+        lore:
+          - '&7Melhorar a qualidade da sua matadora'
+          - '&7resulta em um bônus, que é aplicado'
+          - '&7em todos encantamentos.'
+          - ''
+          - ' &8▶ &7Qualidade: {quality} &8➟ {quality_next}'
+          - ' &8▶ &7Bônus: &f{quality_bonus}x &8➟ &f{quality_next_bonus}x'
+          - ' &8▶ &7Custo: {cost}'
+          - ''
+          - '&cNecessário nível {required_level} ou superior!'
+      can-not-upgrade:
+        type: SKULL_ITEM
+        owner: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmQxMWM5NmRkMmI3NmQ4MWJmZjIyMDU5ZTQzMjc2NTc1NjY2OTU2Y2NhOGEzYTc1ODM1ZDA0MmFjYjNmNDI4YyJ9fX0=
+        name: "&cQualidade"
+        lore:
+          - '&7Melhorar a qualidade da sua matadora'
+          - '&7resulta em um bônus, que é aplicado'
+          - '&7em todos encantamentos.'
+          - ''
+          - ' &8▶ &7Qualidade: {quality} &8➟ {quality_next}'
+          - ' &8▶ &7Bônus: &f{quality_bonus}x &8➟ &f{quality_next_bonus}x'
+          - ' &8▶ &7Custo: {cost}'
+          - ''
+          - '&cEsse item não possui coins suficientes!'
+      can-upgrade:
+        type: SKULL_ITEM
+        owner: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODAzNzYyNTRkNTczNWFiMTU2N2IzZjg3YzdmYmRlNDFkZmM0MTYyMmI2NTEwYjY2N2Q4MmM5ZWZlOGE1Y2VkMSJ9fX0=
+        name: "&6Qualidade"
+        lore:
+          - '&7Melhorar a qualidade da sua matadora'
+          - '&7resulta em um bônus, que é aplicado'
+          - '&7em todos encantamentos.'
+          - ''
+          - ' &8▶ &7Qualidade: {quality} &8➟ {quality_next}'
+          - ' &8▶ &7Bônus: &f{quality_bonus}x &8➟ &f{quality_next_bonus}x'
+          - ' &8▶ &7Custo: {cost}'
+          - ''
+          - '&7Clique para evoluir!'
+      max-level:
+        type: SKULL_ITEM
+        owner: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTRhODQ1NTVmZjM3NzljMjBmMDhjNDgzNTkyNTViZjlmODFmMWMzNjczYzYzOTgyNjE4YzY0MDYyZTg5MmFlMiJ9fX0=
+        name: "&6Qualidade"
+        lore:
+          - '&7Melhorar a qualidade da sua matadora'
+          - '&7resulta em um bônus, que é aplicado'
+          - '&7em todos encantamentos.'
+          - ''
+          - ' &8▶ &7Qualidade: {quality}'
+          - ' &8▶ &7Bônus: &f{quality_bonus}x'
+          - ''
+          - '&cA qualidade já está no nível máximo!'
+    2:
+      slot: 29
+      action: 'UPGRADE:DAMAGE'
+      locked:
+        type: BARRIER
+        name: "&cDano"
+        lore:
+          - '&7Causar mais dano pode ser decisivo,'
+          - '&7principalmente contra bosses'
+          - '&7extremamente poderosos.'
+          - ''
+          - ' &8▶ &7Dano: &f{damage_damage} &4&l❤ &8➟ &f{damage_next_damage} &4&l❤'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&cNecessário nível {required_level} ou superior para evoluir!'
+      can-not-upgrade:
+        type: REDSTONE
+        name: "&cDano"
+        lore:
+          - '&7Causar mais dano pode ser decisivo,'
+          - '&7principalmente contra bosses'
+          - '&7extremamente poderosos.'
+          - ''
+          - ' &8▶ &7Dano: &f{damage_damage} &4&l❤ &8➟ &f{damage_next_damage} &4&l❤'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&cEsse item não possui relíquias suficientes!'
+      can-upgrade:
+        type: ENCHANTED_BOOK
+        name: "&6Dano"
+        lore:
+          - '&7Causar mais dano pode ser decisivo,'
+          - '&7principalmente contra bosses'
+          - '&7extremamente poderosos.'
+          - ''
+          - ' &8▶ &7Dano: &f{damage_damage} &4&l❤ &8➟ &f{damage_next_damage} &4&l❤'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&7Clique para evoluir esse encantamento!'
+      max-level:
+        type: NETHER_STAR
+        name: "&6Dano"
+        lore:
+          - '&7Causar mais dano pode ser decisivo,'
+          - '&7principalmente contra bosses'
+          - '&7extremamente poderosos.'
+          - ''
+          - ' &8▶ &7Dano: &f{damage_damage} &4&l❤'
+          - ''
+          - '&cEsse encantamento já está no nível máximo!'
+    3:
+      slot: 30
+      action: 'UPGRADE:CRIT-DAMAGE'
+      locked:
+        type: BARRIER
+        name: "&cDano Crítico"
+        lore:
+          - '&7O crítico aumenta consideravelmente'
+          - '&7o dano causado nos bosses.'
+          - ''
+          - ' &8▶ &7Nível: &f{crit-damage} &8➟ &f{crit-damage_next}'
+          - ' &8▶ &7Chance: &f{crit-damage_chance}% &8➟ &f{crit-damage_next_chance}%'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&cNecessário nível {required_level} ou superior para evoluir!'
+      can-not-upgrade:
+        type: REDSTONE
+        name: "&cDano Crítico"
+        lore:
+          - '&7O crítico aumenta consideravelmente'
+          - '&7o dano causado nos bosses.'
+          - ''
+          - ' &8▶ &7Nível: &f{crit-damage} &8➟ &f{crit-damage_next}'
+          - ' &8▶ &7Chance: &f{crit-damage_chance}% &8➟ &f{crit-damage_next_chance}%'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&cEsse item não possui relíquias suficientes!'
+      can-upgrade:
+        type: ENCHANTED_BOOK
+        name: "&6Dano Crítico"
+        lore:
+          - '&7O crítico aumenta consideravelmente'
+          - '&7o dano causado nos bosses.'
+          - ''
+          - ' &8▶ &7Nível: &f{crit-damage} &8➟ &f{crit-damage_next}'
+          - ' &8▶ &7Chance: &f{crit-damage_chance}% &8➟ &f{crit-damage_next_chance}%'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&7Clique para evoluir esse encantamento!'
+      max-level:
+        type: NETHER_STAR
+        name: "&6Dano Crítico"
+        lore:
+          - '&7O crítico aumenta consideravelmente'
+          - '&7o dano causado nos bosses.'
+          - ''
+          - ' &8▶ &7Nível: &f{crit-damage}'
+          - ' &8▶ &7Chance: &f{crit-damage_chance}%'
+          - ''
+          - '&cEsse encantamento já está no nível máximo!'
+    4:
+      slot: 32
+      action: 'UPGRADE:AREA-DAMAGE'
+      locked:
+        type: BARRIER
+        name: "&cDano em Área"
+        lore:
+          - '&7O dano em área pode ser útil contra'
+          - '&7bosses que invocam minions.'
+          - ''
+          - ' &8▶ &7Nível: &f{area-damage} &8➟ &f{area-damage_next}'
+          - ' &8▶ &7Chance: &f{area-damage_chance}% &8➟ &f{area-damage_next_chance}%'
+          - ' &8▶ &7Raio: &f{area-damage_radius} &7blocos'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&cNecessário nível {required_level} ou superior para evoluir!'
+      can-not-upgrade:
+        type: REDSTONE
+        name: "&cDano em Área"
+        lore:
+          - '&7O dano em área pode ser útil contra'
+          - '&7bosses que invocam minions.'
+          - ''
+          - ' &8▶ &7Nível: &f{area-damage} &8➟ &f{area-damage_next}'
+          - ' &8▶ &7Chance: &f{area-damage_chance}% &8➟ &f{area-damage_next_chance}%'
+          - ' &8▶ &7Raio: &f{area-damage_radius} &7blocos'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&cEsse item não possui relíquias suficientes!'
+      can-upgrade:
+        type: ENCHANTED_BOOK
+        name: "&6Dano em Área"
+        lore:
+          - '&7O dano em área pode ser útil contra'
+          - '&7bosses que invocam minions.'
+          - ''
+          - ' &8▶ &7Nível: &f{area-damage} &8➟ &f{area-damage_next}'
+          - ' &8▶ &7Chance: &f{area-damage_chance}% &8➟ &f{area-damage_next_chance}%'
+          - ' &8▶ &7Raio: &f{area-damage_radius} &7blocos'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&7Clique para evoluir esse encantamento!'
+      max-level:
+        type: NETHER_STAR
+        name: "&6Dano em Área"
+        lore:
+          - '&7O dano em área pode ser útil contra'
+          - '&7bosses que invocam minions.'
+          - ''
+          - ' &8▶ &7Nível: &f{area-damage}'
+          - ' &8▶ &7Chance: &f{area-damage_chance}%'
+          - ' &8▶ &7Raio: &f{area-damage_radius} &7blocos'
+          - ''
+          - '&cEsse encantamento já está no nível máximo!'
+    5:
+      slot: 33
+      action: 'UPGRADE:EXP'
+      locked:
+        type: BARRIER
+        name: "&cEXP"
+        lore:
+          - '&7Aumentando o EXP ganho, sua'
+          - '&7matadora irá evoluir mais rápido.'
+          - ''
+          - ' &8▶ &7Nível: &f{exp} &8➟ &f{exp_next}'
+          - ' &8▶ &7Bônus: &f{exp_multiplier}x &8➟ &f{exp_next_multiplier}x'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&cNecessário nível {required_level} ou superior para evoluir!'
+      can-not-upgrade:
+        type: REDSTONE
+        name: "&cEXP"
+        lore:
+          - '&7Aumentando o EXP ganho, sua'
+          - '&7matadora irá evoluir mais rápido.'
+          - ''
+          - ' &8▶ &7Nível: &f{exp} &8➟ &f{exp_next}'
+          - ' &8▶ &7Bônus: &f{exp_multiplier}x &8➟ &f{exp_next_multiplier}x'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&cEsse item não possui relíquias suficientes!'
+      can-upgrade:
+        type: ENCHANTED_BOOK
+        name: "&6EXP"
+        lore:
+          - '&7Aumentando o EXP ganho, sua'
+          - '&7matadora irá evoluir mais rápido.'
+          - ''
+          - ' &8▶ &7Nível: &f{exp} &8➟ &f{exp_next}'
+          - ' &8▶ &7Bônus: &f{exp_multiplier}x &8➟ &f{exp_next_multiplier}x'
+          - ' &8▶ &7Custo: &f{cost} &6&l✶'
+          - ''
+          - '&7Clique para evoluir esse encantamento!'
+      max-level:
+        type: NETHER_STAR
+        name: "&6EXP"
+        lore:
+          - '&7Aumentando o EXP ganho, sua'
+          - '&7matadora irá evoluir mais rápido.'
+          - ''
+          - ' &8▶ &7Nível: &f{exp}'
+          - ' &8▶ &7Bônus: &f{exp_multiplier}x'
+          - ''
+          - '&cEsse encantamento já está no nível máximo!'
