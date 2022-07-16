@@ -29,7 +29,7 @@ public class PointsListeners implements Listener {
         ItemStack cursor = event.getCursor();
 
         NBTItem cursorNBT = new NBTItem(cursor);
-        if (!cursorNBT.hasKey(BossKillerUtils.POINTS_NBT)) return;
+        if (!cursorNBT.hasKey(BossKillerUtils.POINTS_ITEM_NBT)) return;
 
         ItemStack item = event.getCurrentItem().clone();
         if (!BossKillerUtils.isBossKiller(item)) return;
@@ -39,7 +39,7 @@ public class PointsListeners implements Listener {
         cursor.setAmount(cursor.getAmount() - 1);
         event.setCursor(cursor);
 
-        int pointsAmount = cursorNBT.getInteger(BossKillerUtils.POINTS_NBT);
+        int pointsAmount = cursorNBT.getInteger(BossKillerUtils.POINTS_ITEM_NBT);
         ItemStack newItem = BossKillerUtils.addItemPoints(item, pointsAmount);
 
         player.getInventory().setItem(event.getSlot(), newItem);
@@ -52,6 +52,6 @@ public class PointsListeners implements Listener {
 
         ItemStack item = event.getItem();
         NBTItem nbt = new NBTItem(item);
-        if (nbt.hasKey(BossKillerUtils.POINTS_NBT)) event.setCancelled(true);
+        if (nbt.hasKey(BossKillerUtils.POINTS_ITEM_NBT)) event.setCancelled(true);
     }
 }

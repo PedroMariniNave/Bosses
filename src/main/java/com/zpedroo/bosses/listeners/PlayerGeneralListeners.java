@@ -5,6 +5,7 @@ import com.zpedroo.bosses.objects.spawner.BossSpawner;
 import com.zpedroo.bosses.utils.bosskiller.BossKillerUtils;
 import com.zpedroo.bosses.utils.config.Items;
 import com.zpedroo.bosses.utils.menu.Menus;
+import com.zpedroo.multieconomy.utils.config.Settings;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -60,7 +61,7 @@ public class PlayerGeneralListeners implements Listener {
         event.setCancelled(true);
 
         Player player = event.getDamager() instanceof Player ? (Player) event.getDamager() : null;
-        if (player == null || !player.isSneaking() || !player.hasPermission("bosses.admin")) return;
+        if (player == null || !player.isSneaking() || !player.hasPermission(Settings.ADMIN_PERMISSION)) return;
 
         bossSpawner.delete();
         player.getInventory().addItem(Items.getBossSpawnerItem());
@@ -70,6 +71,8 @@ public class PlayerGeneralListeners implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) return;
         if (!BossKillerUtils.isBossKiller(event.getItem())) return;
+
+        event.setCancelled(true);
 
         Player player = event.getPlayer();
         ItemStack item = event.getItem();

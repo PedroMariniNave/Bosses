@@ -24,7 +24,7 @@ public class Items {
     @NotNull
     public static ItemStack getBossPointsItem(int amount) {
         NBTItem nbt = new NBTItem(BOSS_POINTS_ITEM.clone());
-        nbt.setInteger(BossKillerUtils.POINTS_NBT, amount);
+        nbt.setInteger(BossKillerUtils.POINTS_ITEM_NBT, amount);
 
         String[] placeholders = new String[]{
                 "{amount}"
@@ -59,7 +59,7 @@ public class Items {
         }
 
         nbt.setDouble(BossKillerUtils.EXPERIENCE_NBT, BossKillerUtils.getItemExperience(baseItem));
-        nbt.setInteger(BossKillerUtils.POINTS_NBT, BossKillerUtils.getItemPoints(baseItem));
+        nbt.setInteger(BossKillerUtils.BOSS_KILLER_POINTS_NBT, BossKillerUtils.getItemPoints(baseItem));
 
         ItemStack item = nbt.getItem();
         return replaceItemPlaceholders(item, BossKillerUtils.getPlaceholders(), BossKillerUtils.getReplacers(item));

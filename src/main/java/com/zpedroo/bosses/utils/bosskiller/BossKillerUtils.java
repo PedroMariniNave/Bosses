@@ -24,7 +24,8 @@ import java.util.List;
 
 public class BossKillerUtils {
 
-    public static final String POINTS_NBT = "BossKillerPoints";
+    public static final String POINTS_ITEM_NBT = "BossPointsItem";
+    public static final String BOSS_KILLER_POINTS_NBT = "BossKillerPoints";
     public static final String EXPERIENCE_NBT = "BossKillerExperience";
     public static final String QUALITY_NBT = "BossKillerQuality";
     public static final String IDENTIFIER_NBT = "BossKiller";
@@ -39,7 +40,7 @@ public class BossKillerUtils {
 
     public static ItemStack setItemPoints(@NotNull ItemStack item, int amount) {
         NBTItem nbt = new NBTItem(item);
-        nbt.setInteger(POINTS_NBT, amount);
+        nbt.setInteger(BOSS_KILLER_POINTS_NBT, amount);
 
         return Items.getBossKillerItem(nbt.getItem());
     }
@@ -75,9 +76,9 @@ public class BossKillerUtils {
 
     public static int getItemPoints(@NotNull ItemStack item) {
         NBTItem nbt = new NBTItem(item);
-        if (!nbt.hasKey(POINTS_NBT)) return 0;
+        if (!nbt.hasKey(BOSS_KILLER_POINTS_NBT)) return 0;
 
-        return nbt.getInteger(POINTS_NBT);
+        return nbt.getInteger(BOSS_KILLER_POINTS_NBT);
     }
 
     public static int getEnchantmentLevel(@NotNull ItemStack item, @Nullable Enchant enchant) {
@@ -115,7 +116,7 @@ public class BossKillerUtils {
         double propertyValue = getPropertyValue(enchant, property);
         double qualityBonus = getFinalQualityBonus(quality);
 
-        return initialValue + (level * propertyValue) * qualityBonus;
+        return initialValue + (level * propertyValue * qualityBonus);
     }
 
     public static int getEnchantUpgradeCost(@NotNull ItemStack item, @Nullable Enchant enchant) {
