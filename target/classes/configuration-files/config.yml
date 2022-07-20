@@ -193,7 +193,7 @@ Boss-Killer-Item:
     - '&7Crítico: &f{crit-damage}'
     - '&7EXP: &f{exp}'
     - ''
-    - ' &8► &fNível: &7{level} {progress}'
+    - ' &8► &fNível: &7{level} {progress} &8({percentage}%)'
     - ' &8► &fRelíquias: &7{points} &6&l✶'
     - ' &8► &fQualidade: {quality}'
     - ''
