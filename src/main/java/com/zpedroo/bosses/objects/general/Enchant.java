@@ -8,6 +8,7 @@ import lombok.Data;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class Enchant {
     private final int initialLevel;
     private final int maxLevel;
     private final int requiredLevel;
-    private final int costPerLevel;
+    private final BigInteger costPerLevel;
     private final Map<EnchantProperty, Number> enchantProperties;
     private final Map<EnchantProperty, Number> initialValues;
 

@@ -40,7 +40,7 @@ public class BossesCmd implements CommandExecutor {
                     amount = NumberFormatter.getInstance().filter(args[2]);
                     if (amount.signum() <= 0) break;
 
-                    item = Items.getBossPointsItem(amount.intValue());
+                    item = Items.getBossPointsItem(amount);
                     giveItemToPlayer(target, item);
                     return true;
             }

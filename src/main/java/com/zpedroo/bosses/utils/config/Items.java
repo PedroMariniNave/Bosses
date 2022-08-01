@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,15 +23,15 @@ public class Items {
     private static final ItemStack BOSS_SPAWNER_ITEM = ItemBuilder.build(FileUtils.get().getFile(FileUtils.Files.CONFIG).get(), "Spawner-Item").build();
 
     @NotNull
-    public static ItemStack getBossPointsItem(int amount) {
+    public static ItemStack getBossPointsItem(BigInteger amount) {
         NBTItem nbt = new NBTItem(BOSS_POINTS_ITEM.clone());
-        nbt.setInteger(BossKillerUtils.POINTS_ITEM_NBT, amount);
+        nbt.setString(BossKillerUtils.POINTS_ITEM_NBT, amount.toString());
 
         String[] placeholders = new String[]{
                 "{amount}"
         };
         String[] replacers = new String[]{
-                NumberFormatter.getInstance().formatThousand(amount)
+                NumberFormatter.getInstance().format(amount)
         };
 
         return replaceItemPlaceholders(nbt.getItem(), placeholders, replacers);
@@ -59,7 +60,7 @@ public class Items {
         }
 
         nbt.setDouble(BossKillerUtils.EXPERIENCE_NBT, BossKillerUtils.getItemExperience(baseItem));
-        nbt.setInteger(BossKillerUtils.BOSS_KILLER_POINTS_NBT, BossKillerUtils.getItemPoints(baseItem));
+        nbt.setString(BossKillerUtils.BOSS_KILLER_POINTS_NBT, BossKillerUtils.getItemPoints(baseItem).toString());
 
         ItemStack item = nbt.getItem();
         return replaceItemPlaceholders(item, BossKillerUtils.getPlaceholders(), BossKillerUtils.getReplacers(item));

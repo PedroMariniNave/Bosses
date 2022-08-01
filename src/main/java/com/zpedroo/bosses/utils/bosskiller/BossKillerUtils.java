@@ -30,17 +30,17 @@ public class BossKillerUtils {
     public static final String QUALITY_NBT = "BossKillerQuality";
     public static final String IDENTIFIER_NBT = "BossKiller";
 
-    public static ItemStack addItemPoints(@NotNull ItemStack item, int amount) {
-        return setItemPoints(item, getItemPoints(item) + amount);
+    public static ItemStack addItemPoints(@NotNull ItemStack item, BigInteger amount) {
+        return setItemPoints(item, getItemPoints(item).add(amount));
     }
 
-    public static ItemStack removeItemPoints(@NotNull ItemStack item, int amount) {
-        return setItemPoints(item, getItemPoints(item) - amount);
+    public static ItemStack removeItemPoints(@NotNull ItemStack item, BigInteger amount) {
+        return setItemPoints(item, getItemPoints(item).subtract(amount));
     }
 
-    public static ItemStack setItemPoints(@NotNull ItemStack item, int amount) {
+    public static ItemStack setItemPoints(@NotNull ItemStack item, BigInteger amount) {
         NBTItem nbt = new NBTItem(item);
-        nbt.setInteger(BOSS_KILLER_POINTS_NBT, amount);
+        nbt.setString(BOSS_KILLER_POINTS_NBT, amount.toString());
 
         return Items.getBossKillerItem(nbt.getItem());
     }
@@ -74,11 +74,11 @@ public class BossKillerUtils {
         return nbt.getInteger(QUALITY_NBT);
     }
 
-    public static int getItemPoints(@NotNull ItemStack item) {
+    public static BigInteger getItemPoints(@NotNull ItemStack item) {
         NBTItem nbt = new NBTItem(item);
-        if (!nbt.hasKey(BOSS_KILLER_POINTS_NBT)) return 0;
+        if (!nbt.hasKey(BOSS_KILLER_POINTS_NBT)) return BigInteger.ZERO;
 
-        return nbt.getInteger(BOSS_KILLER_POINTS_NBT);
+        return new BigInteger(nbt.getString(BOSS_KILLER_POINTS_NBT));
     }
 
     public static int getEnchantmentLevel(@NotNull ItemStack item, @Nullable Enchant enchant) {
@@ -119,14 +119,14 @@ public class BossKillerUtils {
         return initialValue + (level * propertyValue * qualityBonus);
     }
 
-    public static int getEnchantUpgradeCost(@NotNull ItemStack item, @Nullable Enchant enchant) {
-        if (enchant == null) return 0;
+    public static BigInteger getEnchantUpgradeCost(@NotNull ItemStack item, @Nullable Enchant enchant) {
+        if (enchant == null) return BigInteger.ZERO;
 
         int enchantLevel = getEnchantmentLevel(item, enchant);
         int nextLevel = enchantLevel + 1;
-        int costPerLevel = enchant.getCostPerLevel();
+        BigInteger costPerLevel = enchant.getCostPerLevel();
 
-        return nextLevel * costPerLevel;
+        return BigInteger.valueOf(nextLevel).multiply(costPerLevel);
     }
 
     public static int getEnchantUpgradeLevelRequired(@NotNull ItemStack item, @Nullable Enchant enchant) {
@@ -140,7 +140,7 @@ public class BossKillerUtils {
     }
 
     public static ItemStack upgradeEnchantment(@NotNull ItemStack item, @NotNull Enchant enchant) {
-        int upgradeCost = getEnchantUpgradeCost(item, enchant);
+        BigInteger upgradeCost = getEnchantUpgradeCost(item, enchant);
         item = removeItemPoints(item, upgradeCost);
         item = addEnchantmentLevel(item, enchant, 1);
 
@@ -195,7 +195,7 @@ public class BossKillerUtils {
             return item;
         }
 
-        item = removeItemPoints(item, upgradeCost.intValue());
+        item = removeItemPoints(item, upgradeCost);
         return item;
     }
 
@@ -216,10 +216,10 @@ public class BossKillerUtils {
     public static boolean canUpgradeEnchant(ItemStack item, Enchant enchant) {
         if (!isUnlockedEnchant(item, enchant) || isMaxEnchantLevel(item, enchant)) return false;
 
-        int itemPointsAmount = getItemPoints(item);
-        int upgradeCost = getEnchantUpgradeCost(item, enchant);
+        BigInteger itemPointsAmount = getItemPoints(item);
+        BigInteger upgradeCost = getEnchantUpgradeCost(item, enchant);
 
-        return itemPointsAmount >= upgradeCost;
+        return itemPointsAmount.compareTo(upgradeCost) >= 0;
     }
 
     public static boolean isUnlockedQuality(ItemStack item) {
@@ -244,8 +244,8 @@ public class BossKillerUtils {
             return currencyAmount.compareTo(upgradeCost) >= 0;
         }
 
-        int itemPointsAmount = getItemPoints(item);
-        return itemPointsAmount >= upgradeCost.intValue();
+        BigInteger itemPointsAmount = getItemPoints(item);
+        return itemPointsAmount.compareTo(upgradeCost) >= 0;
     }
 
     public static boolean isMaxEnchantLevel(ItemStack item, Enchant enchant) {
@@ -287,7 +287,7 @@ public class BossKillerUtils {
         int itemQuality = getItemQuality(item);
         int nextItemQuality = itemQuality + 1;
 
-        replacers.add(NumberFormatter.getInstance().formatThousand(getItemPoints(item)));
+        replacers.add(NumberFormatter.getInstance().format(getItemPoints(item)));
         replacers.add(NumberFormatter.getInstance().formatThousand(getItemLevel(item)));
         replacers.add(NumberFormatter.getInstance().formatDecimal(ProgressConverter.getPercentage(getItemExperience(item))));
         replacers.add(ProgressConverter.convertExperience(getItemExperience(item)));

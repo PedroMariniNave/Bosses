@@ -3,7 +3,9 @@ package com.zpedroo.bosses.utils.loader;
 import com.zpedroo.bosses.enums.EnchantProperty;
 import com.zpedroo.bosses.objects.general.Enchant;
 import com.zpedroo.bosses.utils.FileUtils;
+import com.zpedroo.bosses.utils.formatter.NumberFormatter;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +18,7 @@ public class EnchantLoader {
         int initialLevel = FileUtils.get().getInt(file, "Enchants." + enchantName + ".level.initial");
         int maxLevel = FileUtils.get().getInt(file, "Enchants." + enchantName + ".level.max");
         int requiredLevel = FileUtils.get().getInt(file, "Enchants." + enchantName + ".level.requirement-per-upgrade");
-        int costPerLevel = FileUtils.get().getInt(file, "Enchants." + enchantName + ".cost-per-level");
+        BigInteger costPerLevel = NumberFormatter.getInstance().filter(FileUtils.get().getString(file, "Enchants." + enchantName + ".cost-per-level", "0"));
         double damageInitialValue = FileUtils.get().getDouble(file, "Enchants." + enchantName + ".damage.initial-value");
         double damagePerLevel = FileUtils.get().getDouble(file, "Enchants." + enchantName + ".damage.upgrade-per-level");
         double damageMultiplier = FileUtils.get().getDouble(file, "Enchants." + enchantName + ".damage-multiplier");

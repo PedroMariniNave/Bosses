@@ -27,7 +27,7 @@ public class BossBar {
         sendDestroyPacket();
 
         Vector vector = player.getLocation().getDirection();
-        Location location = player.getLocation().clone().add(vector.multiply(50));
+        Location location = player.getLocation().clone().add(vector.multiply(25));
         WorldServer world = ((CraftWorld) location.getWorld()).getHandle();
         wither = new EntityWither(world);
         wither.setLocation(location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getYaw());
